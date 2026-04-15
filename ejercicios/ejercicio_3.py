@@ -5,34 +5,36 @@ def obtener_inicio(laberinto):
                 return (fila,columna)
     return (None,None)
 
-def avanzar(laberinto,fila,columna,resultado):
+def avanzar(laberinto,fila,columna,resultado,visitados):
     if (fila < 0 or columna < 0 or fila >= len(laberinto) or columna >= len(laberinto[0])
-        or laberinto[fila][columna] == "X" or (fila,columna) in resultado):
+        or laberinto[fila][columna] == "X" or (fila,columna) in visitados):
         return resultado
     
     resultado.append((fila,columna))
-    derecha = avanzar(laberinto,fila,columna+1,resultado)
+    visitados.append((fila,columna))
+    
+    derecha = avanzar(laberinto,fila,columna+1,resultado,visitados)
 
     fila_derecha, columna_derecha = derecha[len(derecha)-1]
     
     if(laberinto[fila_derecha][columna_derecha] == "S"):
         return derecha
     
-    izquierda = avanzar(laberinto,fila,columna-1,resultado)
+    izquierda = avanzar(laberinto,fila,columna-1,resultado,visitados)
     
     fila_izquierda, columna_izquierda = izquierda[len(izquierda)-1]
     
     if(laberinto[fila_izquierda][columna_izquierda] == "S"):
         return izquierda
     
-    abajo = avanzar(laberinto,fila+1,columna,resultado)
+    abajo = avanzar(laberinto,fila+1,columna,resultado,visitados)
     
     fila_abajo, columna_abajo = abajo[len(abajo)-1]
     
     if(laberinto[fila_abajo][columna_abajo] == "S"):
         return abajo
 
-    arriba = avanzar(laberinto,fila-1,columna,resultado)
+    arriba = avanzar(laberinto,fila-1,columna,resultado,visitados)
     fila_arriba, columna_arriba = arriba[len(arriba)-1]
 
     if(laberinto[fila_arriba][columna_arriba] == "S"):
@@ -48,15 +50,15 @@ def encontrar_camino_bt(laberinto):
     if fila_inicial == None or columna_inicial == None:
         return []
     
-    return avanzar(laberinto,fila_inicial,columna_inicial,[])
+    return avanzar(laberinto,fila_inicial,columna_inicial,[],[])
 
 laberinto = [
-    ["X","X","X","X","X","X","X","X"],
-    ["X"," "," "," "," ","X"," ","S"],
-    ["X"," ","X","X","X","X"," ","X"],
-    ["X"," "," "," ","X","X"," ","X"],
-    ["X"," ","X"," "," "," "," ","X"],
-    ["X","E","X","X","X","X","X","X"]
+    ["X","X","X","X","X","X","X","X","X","X"],
+    ["S"," "," "," "," ","X"," "," "," ","X"],
+    ["X"," ","X","X","X","X"," ","X"," ","X"],
+    ["X"," "," "," ","X","X"," ","X"," ","X"],
+    ["X"," ","X"," "," "," "," "," "," ","X"],
+    ["X","E","X","X","X","X","X","X","X","X"]
 ]
 
 resultado = encontrar_camino_bt(laberinto)
