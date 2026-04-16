@@ -72,3 +72,4 @@ Si utiliza la extensión LaTeX Workshop, puede configurar la compilación autom�
 *   `informe/tex/`: Contiene los archivos `.tex` de cada sección.
 *   `informe/img/`: Imágenes utilizadas en el informe.
 *   `informe/code/`: Fragmentos de código fuente.
+*   `informe/ej{N}-{Metodologia}/`: Contiene los archivos `.tex` de cada metodología.
