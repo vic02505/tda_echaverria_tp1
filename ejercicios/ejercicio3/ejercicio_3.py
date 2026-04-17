@@ -1,3 +1,7 @@
+from lectura_escritura_de_archivos import obtener_laberinto_desde_archivo, guardar_resultado
+import sys
+import time
+
 def obtener_inicio(laberinto):
     for fila in range(0,len(laberinto)):
         for columna in range(0,len(laberinto[0])):
@@ -52,14 +56,20 @@ def encontrar_camino_bt(laberinto):
     
     return avanzar(laberinto,fila_inicial,columna_inicial,[],[])
 
-laberinto = [
-    ["X","X","X","X","X","X","X","X","X","X"],
-    ["S"," "," "," "," ","X"," "," "," ","X"],
-    ["X"," ","X","X","X","X"," ","X"," ","X"],
-    ["X"," "," "," ","X","X"," ","X"," ","X"],
-    ["X"," ","X"," "," "," "," "," "," ","X"],
-    ["X","E","X","X","X","X","X","X","X","X"]
-]
 
-resultado = encontrar_camino_bt(laberinto)
-print(resultado)
+def main():
+    if(len(sys.argv) != 3):
+        print("Error: parametros incorrectos. La ejecucion debe ser en formato:")
+        print("python3 ejercicios/ejercicio_3/ejercicio_3.py <archivo_input> <archivo_output>")
+        sys.exit(1)
+
+    archivo_input_str = sys.argv[1]
+    archivo_output_str = sys.argv[2]
+    laberinto = obtener_laberinto_desde_archivo(archivo_input_str)
+    t1 = time.time()
+    resultado = encontrar_camino_bt(laberinto)
+    t2 = time.time()
+    print(t2 - t1)
+    guardar_resultado(resultado,archivo_output_str)
+
+main()
