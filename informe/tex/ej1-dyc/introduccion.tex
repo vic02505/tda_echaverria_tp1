@@ -1,3 +1,84 @@
 \subsection{Introducción y Problema}
 
-Describir brevemente el problema de comparación de monedas y cómo se aborda mediante Programación Dinámica (o la técnica correspondiente).
+Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto. El objetivo es identificar la moneda falsa sin ordenar por peso y usando División y Conquista.
+
+La entrada se representa como una lista de pesos en un archivo de texto con valores separados por comas. Se asume que todos los pesos verdaderos son iguales (por ejemplo 10) y la falsa es más liviana (por ejemplo 4).
+
+\subsection{Algoritmo de División y Conquista}
+
+El algoritmo divide el arreglo en mitades. En cada paso compara las monedas de las posiciones centrales:
+
+\begin{enumerate}
+	\item Si las dos monedas centrales son distintas, la más liviana es la falsa.
+	\item Si son iguales, se recurre sobre ambas mitades y luego se elige el mínimo entre los resultados.
+\end{enumerate}
+
+Cada comparación de dos monedas se contabiliza como una pesada. La función principal parsea el archivo, llama al algoritmo y reporta tiempo y cantidad de pesadas.
+
+El código del algoritmo de División y Conquista es:
+
+\begin{lstlisting}[language=Python]
+def encontrar_moneda_falsa_dyc(monedas, inicio, fin, contador):
+	if inicio >= fin:
+		return monedas[inicio]
+
+	if fin - inicio == 1:
+		contador[0] += 1
+		return monedas[inicio] if monedas[inicio] <= monedas[fin] else monedas[fin]
+
+	medio = (inicio + fin) // 2
+
+	contador[0] += 1
+	if monedas[medio] != monedas[medio + 1]:
+		return monedas[medio] if monedas[medio] < monedas[medio + 1] else monedas[medio + 1]
+
+	izquierdo = encontrar_moneda_falsa_dyc(monedas, inicio, medio, contador)
+	derecho = encontrar_moneda_falsa_dyc(monedas, medio + 1, fin, contador)
+
+	contador[0] += 1
+	return izquierdo if izquierdo <= derecho else derecho
+\end{lstlisting}
+
+\subsection{Complejidad temporal y cantidad de pesadas}
+
+Sea $T(n)$ el tiempo del algoritmo. La recurrencia es:
+
+$$T(n) = 2T(n/2) + O(1)$$
+
+La ecuación se justifica porque en cada llamada se divide el problema en dos subproblemas de tamaño $n/2$ (dos llamadas recursivas) y el costo adicional de comparar y seleccionar resultados es constante, es decir, $O(1)$.
+
+Por el Teorema Maestro, $Complejidad = O(n)$. 
+
+\subsection{Metodología experimental}
+
+Se evaluó el algoritmo con tamaños $n = \{100, 500, 1000, 5000, 10000, 50000\}$. Para cada tamaño se generó un archivo con una única moneda falsa y se ejecutó:
+
+\begin{verbatim}
+python3 ejercicios/ej-dyc/monedas.py 100
+\end{verbatim}
+
+El tiempo se midió con la función time del sistema y se registró la cantidad de pesadas. Los resultados se guardaron en una tabla y se graficaron junto con una curva teórica lineal $O(n)$.
+
+\subsection{Resultados y gráficos}
+
+\input{tex/ej1-dyc/resultados_ej1}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.75\textwidth]{tex/ej1-dyc/img/ej1_tiempos.png}
+	\caption{Tiempo de ejecución medido vs curva teórica $O(n)$.}
+	\label{fig:ej1-tiempos}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.75\textwidth]{tex/ej1-dyc/img/ej1_pesadas.png}
+	\caption{Cantidad de pesadas medida vs curva teórica $O(n)$.}
+	\label{fig:ej1-pesadas}
+\end{figure}
+
+Los gráficos muestran un crecimiento cercano al lineal, consistente con la complejidad analizada. La curva teórica se escaló para superponerla con la serie medida.
+
+\subsection{Relación entre tiempo de ejecución y pesadas}
+
+Es razonable vincular el tiempo con la cantidad de pesadas porque cada pesada implica una comparación de pesos, y el algoritmo realiza un número lineal de comparaciones. Sin embargo, el tiempo también incluye costos de lectura de datos y llamadas recursivas, por lo que la relación no es perfectamente proporcional. Aun así, ambos indicadores reflejan el mismo orden de crecimiento $O(n)$.
