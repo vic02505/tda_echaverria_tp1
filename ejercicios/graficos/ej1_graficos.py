@@ -118,12 +118,14 @@ def main(argv):
     out_dir = root_dir / "ejercicios" / "graficos" / "out"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    report_dir = root_dir / "informe" / "tex" / "ej1-dyc"
+    report_dir = root_dir / "informe"
     img_dir = report_dir / "img"
+    resultados_dir = report_dir / "resultados"
     img_dir.mkdir(parents=True, exist_ok=True)
+    resultados_dir.mkdir(parents=True, exist_ok=True)
 
     guardar_csv(out_dir / "ej1_resultados.csv", sizes, tiempos, pesadas)
-    guardar_tabla_tex(report_dir / "resultados_ej1.tex", sizes, tiempos, pesadas)
+    guardar_tabla_tex(resultados_dir / "resultados_ej1.tex", sizes, tiempos, pesadas)
 
     tiempos_teo = escala_lineal(tiempos, sizes)
     pesadas_teo = escala_lineal(pesadas, sizes)
