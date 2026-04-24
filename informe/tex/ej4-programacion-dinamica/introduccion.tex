@@ -1,8 +1,8 @@
-\section{Introducción y Problema}
+\subsection{Introducción y Problema}
 
 El presente trabajo aborda el problema de descomponer una cadena en la menor cantidad posible de substrings que sean palíndromos. Se propone una solución basada en programación dinámica que permite resolver el problema en tiempo polinomial.
 
-\section{Supuestos}
+\subsection{Supuestos}
 
 \begin{itemize}
     \item La cadena de entrada tiene longitud $n \geq 1$.
@@ -11,16 +11,16 @@ El presente trabajo aborda el problema de descomponer una cadena en la menor can
     \item Se dispone de memoria suficiente para almacenar estructuras $O(n^2)$.
 \end{itemize}
 
-\section{Diseño del Algoritmo}
+\subsection{Diseño del Algoritmo}
 
-\subsection{Definición del Subproblema}
+\subsubsection{Definición del Subproblema}
 
 Sea:
 \[
 dp[i] = \text{mínima cantidad de palíndromos necesarios para } S[0..i]
 \]
 
-\subsection{Ecuación de Recurrencia}
+\subsubsection{Ecuación de Recurrencia}
 
 \[
 dp[i] = \min_{0 \leq j \leq i} \{ dp[j-1] + 1 \mid S[j..i] \text{ es palíndromo} \}
@@ -31,7 +31,7 @@ Condición base:
 dp[-1] = 0
 \]
 
-\subsection{Preprocesamiento de Palíndromos}
+\subsubsection{Preprocesamiento de Palíndromos}
 
 Se define una matriz:
 
@@ -47,15 +47,15 @@ False & \text{en caso contrario}
 pal[i][j] = (S[i] = S[j]) \land (j - i \leq 1 \lor pal[i+1][j-1])
 \]
 
-\subsection{Subestructura Óptima}
+\subsubsection{Subestructura Óptima}
 
 La solución óptima para $S[0..i]$ depende de soluciones óptimas de subproblemas $S[0..j-1]$. Esto cumple con la propiedad de subestructura óptima.
 
-\subsection{Subproblemas Superpuestos}
+\subsubsection{Subproblemas Superpuestos}
 
 Los valores de $dp[i]$ y $pal[i][j]$ se reutilizan múltiples veces, evitando recomputaciones.
 
-\subsection{Memoización}
+\subsubsection{Memoización}
 
 Se utilizan:
 \begin{itemize}
@@ -63,7 +63,7 @@ Se utilizan:
     \item Arreglo $dp[n]$
 \end{itemize}
 
-\subsection{Pseudocódigo}
+\subsubsection{Pseudocódigo}
 
 \begin{lstlisting}
 func minPalindromos(S):
@@ -93,7 +93,7 @@ func minPalindromos(S):
     devolver dp[n-1]
 \end{lstlisting}
 
-\section{Seguimiento}
+\subsection{Seguimiento}
 
 Ejemplo: $S = ABA$
 
@@ -105,7 +105,7 @@ Ejemplo: $S = ABA$
 
 Resultado: 1 partición.
 
-\section{Complejidad}
+\subsection{Complejidad}
 
 \begin{itemize}
     \item Cálculo de palíndromos: $O(n^2)$
@@ -117,12 +117,8 @@ Complejidad total:
 O(n^2)
 \]
 
-Espacio:
-\[
-O(n^2)
-\]
 
-\section{Sets de Datos}
+\subsection{Sets de Datos}
 
 Se utilizaron los siguientes tipos de datos:
 
@@ -132,21 +128,21 @@ Se utilizaron los siguientes tipos de datos:
     \item Casos aleatorios con semilla fija
 \end{itemize}
 
-\section{Tiempos de Ejecución}
+\subsection{Tiempos de Ejecución}
 
 Se midieron tiempos utilizando múltiples ejecuciones por cada tamaño de entrada, promediando los resultados y calculando el desvío estándar.
 
-\section{Resultados}
+\subsection{Resultados}
 
 Se obtuvo un crecimiento cuadrático en los tiempos de ejecución, consistente con la complejidad teórica.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\textwidth]{grafico_tiempos.png}
+\includegraphics[width=0.8\textwidth]{tex/ej4-programacion-dinamica/grafico_tiempos.png}
 \caption{Comparación entre tiempos medidos y curva teórica}
 \end{figure}
 
-\section{Resultados Experimentales}
+\subsection{Resultados Experimentales}
 
 A continuación se presentan los resultados obtenidos a partir de la ejecución del algoritmo sobre distintos tamaños de entrada. Para cada tamaño, se midió el tiempo de ejecución promedio junto con su desvío estándar, a partir de múltiples ejecuciones.
 
@@ -189,6 +185,12 @@ Si bien pueden existir pequeñas desviaciones, especialmente en tamaños pequeñ
 
 Los resultados obtenidos confirman que el algoritmo presenta un comportamiento cuadrático en la práctica, tal como se había deducido teóricamente. Esto demuestra la efectividad del enfoque de programación dinámica utilizado, tanto desde el punto de vista conceptual como en términos de rendimiento.
 
-\section{Conclusión}
+\subsection{Conclusión}
 
-El algoritmo desarrollado permite resolver el problema en tiempo $O(n^2)$, mejorando significativamente respecto a una solución de fuerza bruta. Los resultados experimentales validan el análisis teórico, mostrando un crecimiento acorde a la complejidad esperada.
+A lo largo de este trabajo se pudo ver cómo un problema que en principio parece complejo, como probar todas las formas posibles de dividir una cadena, puede resolverse de manera eficiente utilizando programación dinámica.
+
+La clave estuvo en cambiar la forma de pensar el problema: en lugar de evaluar todas las particiones posibles, se aprovechó la estructura del problema para construir la solución a partir de subproblemas más pequeños. Además, el preprocesamiento de palíndromos permitió evitar cálculos repetidos y mejorar significativamente el rendimiento.
+
+En la práctica, los resultados obtenidos muestran que el tiempo de ejecución crece de manera cuadrática con el tamaño de la entrada, lo cual coincide con el análisis teórico realizado. Si bien para tamaños pequeños la diferencia no es tan evidente, a medida que crece el tamaño de la cadena se observa claramente esta tendencia.
+
+En conclusión, el uso de programación dinámica permitió transformar un problema potencialmente exponencial en uno manejable, demostrando la importancia de identificar subestructuras óptimas y reutilizar resultados ya calculados.

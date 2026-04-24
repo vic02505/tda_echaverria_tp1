@@ -117,7 +117,7 @@
         \hline
         Joaquín Hernández & 110470 \\
         Juan Francisco Cuevas & 107963 \\
-        Alexander Terrussi  & 00 \\
+        Alexander Terrussi  & 107212 \\
         Dante Finci & 00 \\
         Víctor Zacarías & 107080 \\
         \hline
