@@ -1,3 +1,194 @@
-\subsection{Introducción y Problema}
+\section{Introducción y Problema}
 
-Describir el problema de descomposición de cadenas y el enfoque de Programación Dinámica.
+El presente trabajo aborda el problema de descomponer una cadena en la menor cantidad posible de substrings que sean palíndromos. Se propone una solución basada en programación dinámica que permite resolver el problema en tiempo polinomial.
+
+\section{Supuestos}
+
+\begin{itemize}
+    \item La cadena de entrada tiene longitud $n \geq 1$.
+    \item Una cadena de longitud 1 es un palíndromo.
+    \item El acceso a caracteres es $O(1)$.
+    \item Se dispone de memoria suficiente para almacenar estructuras $O(n^2)$.
+\end{itemize}
+
+\section{Diseño del Algoritmo}
+
+\subsection{Definición del Subproblema}
+
+Sea:
+\[
+dp[i] = \text{mínima cantidad de palíndromos necesarios para } S[0..i]
+\]
+
+\subsection{Ecuación de Recurrencia}
+
+\[
+dp[i] = \min_{0 \leq j \leq i} \{ dp[j-1] + 1 \mid S[j..i] \text{ es palíndromo} \}
+\]
+
+Condición base:
+\[
+dp[-1] = 0
+\]
+
+\subsection{Preprocesamiento de Palíndromos}
+
+Se define una matriz:
+
+\[
+pal[i][j] =
+\begin{cases}
+True & \text{si } S[i..j] \text{ es palíndromo} \\
+False & \text{en caso contrario}
+\end{cases}
+\]
+
+\[
+pal[i][j] = (S[i] = S[j]) \land (j - i \leq 1 \lor pal[i+1][j-1])
+\]
+
+\subsection{Subestructura Óptima}
+
+La solución óptima para $S[0..i]$ depende de soluciones óptimas de subproblemas $S[0..j-1]$. Esto cumple con la propiedad de subestructura óptima.
+
+\subsection{Subproblemas Superpuestos}
+
+Los valores de $dp[i]$ y $pal[i][j]$ se reutilizan múltiples veces, evitando recomputaciones.
+
+\subsection{Memoización}
+
+Se utilizan:
+\begin{itemize}
+    \item Matriz $pal[n][n]$
+    \item Arreglo $dp[n]$
+\end{itemize}
+
+\subsection{Pseudocódigo}
+
+\begin{lstlisting}
+func minPalindromos(S):
+    n = len(S)
+    crear matriz pal[n][n]
+
+    para i en 0..n-1:
+        pal[i][i] = True
+
+    para length en 2..n:
+        para i en 0..n-length:
+            j = i + length - 1
+            si S[i] == S[j] y (length == 2 o pal[i+1][j-1]):
+                pal[i][j] = True
+
+    crear dp[0..n-1]
+
+    para i en 0..n-1:
+        si pal[0][i]:
+            dp[i] = 1
+        sino:
+            dp[i] = infinito
+            para j en 1..i:
+                si pal[j][i]:
+                    dp[i] = min(dp[i], dp[j-1] + 1)
+
+    devolver dp[n-1]
+\end{lstlisting}
+
+\section{Seguimiento}
+
+Ejemplo: $S = ABA$
+
+\begin{itemize}
+    \item $dp[0] = 1$
+    \item $dp[1] = 2$
+    \item $dp[2] = 1$
+\end{itemize}
+
+Resultado: 1 partición.
+
+\section{Complejidad}
+
+\begin{itemize}
+    \item Cálculo de palíndromos: $O(n^2)$
+    \item Programación dinámica: $O(n^2)$
+\end{itemize}
+
+Complejidad total:
+\[
+O(n^2)
+\]
+
+Espacio:
+\[
+O(n^2)
+\]
+
+\section{Sets de Datos}
+
+Se utilizaron los siguientes tipos de datos:
+
+\begin{itemize}
+    \item Mejor caso: cadenas repetidas (ej: AAAA)
+    \item Peor caso: caracteres distintos (ej: ABCDEF)
+    \item Casos aleatorios con semilla fija
+\end{itemize}
+
+\section{Tiempos de Ejecución}
+
+Se midieron tiempos utilizando múltiples ejecuciones por cada tamaño de entrada, promediando los resultados y calculando el desvío estándar.
+
+\section{Resultados}
+
+Se obtuvo un crecimiento cuadrático en los tiempos de ejecución, consistente con la complejidad teórica.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{grafico_tiempos.png}
+\caption{Comparación entre tiempos medidos y curva teórica}
+\end{figure}
+
+\section{Resultados Experimentales}
+
+A continuación se presentan los resultados obtenidos a partir de la ejecución del algoritmo sobre distintos tamaños de entrada. Para cada tamaño, se midió el tiempo de ejecución promedio junto con su desvío estándar, a partir de múltiples ejecuciones.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$n$ & Resultado & Tiempo Promedio (s) & Desvío Estándar \\
+\hline
+10  & 5   & 0.00000941 & 0.00000040 \\
+50  & 13  & 0.00013710 & 0.00004396 \\
+100 & 26  & 0.00053040 & 0.00009450 \\
+200 & 61  & 0.00291414 & 0.00132863 \\
+400 & 127 & 0.00985342 & 0.00342394 \\
+800 & 261 & 0.03777179 & 0.00285343 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Análisis de los Resultados}
+
+A partir de los datos obtenidos, se observa que el tiempo de ejecución crece de manera consistente al aumentar el tamaño de la entrada. En particular, el crecimiento no es lineal, sino que se acelera a medida que $n$ aumenta, lo cual es indicativo de un comportamiento cuadrático.
+
+Este resultado es coherente con el análisis teórico del algoritmo, cuya complejidad temporal es $O(n^2)$. Si se comparan los tiempos entre distintas escalas, se puede notar que al duplicar el tamaño de la entrada, el tiempo de ejecución tiende a multiplicarse aproximadamente por un factor cercano a 4, lo cual coincide con el comportamiento esperado de una función cuadrática.
+
+Por ejemplo, al pasar de $n = 200$ a $n = 400$, el tiempo crece de aproximadamente $0.0029$ segundos a $0.0098$ segundos, lo cual representa un incremento cercano a cuatro veces. De manera similar, al duplicar nuevamente hasta $n = 800$, el tiempo alcanza aproximadamente $0.0377$ segundos, manteniendo la misma tendencia.
+
+\subsection{Análisis del Desvío Estándar}
+
+El desvío estándar permite evaluar la estabilidad de las mediciones realizadas. En los tamaños más pequeños, los valores son muy bajos, lo cual indica una alta consistencia en los tiempos medidos.
+
+A medida que aumenta el tamaño de entrada, el desvío estándar también crece, lo cual es esperable debido a factores externos como la carga del sistema operativo, la gestión de memoria y otras tareas en ejecución. Sin embargo, en todos los casos, el desvío estándar se mantiene relativamente acotado en relación al tiempo promedio, lo que indica que las mediciones son confiables.
+
+\subsection{Comparación con la Curva Teórica}
+
+Al comparar los tiempos medidos con la curva teórica de complejidad $O(n^2)$, se observa que ambos presentan una tendencia similar. Esto valida empíricamente el análisis teórico realizado previamente.
+
+Si bien pueden existir pequeñas desviaciones, especialmente en tamaños pequeños donde los costos constantes tienen mayor impacto, en general la curva experimental se ajusta adecuadamente al modelo teórico.
+
+\subsection{Conclusión Experimental}
+
+Los resultados obtenidos confirman que el algoritmo presenta un comportamiento cuadrático en la práctica, tal como se había deducido teóricamente. Esto demuestra la efectividad del enfoque de programación dinámica utilizado, tanto desde el punto de vista conceptual como en términos de rendimiento.
+
+\section{Conclusión}
+
+El algoritmo desarrollado permite resolver el problema en tiempo $O(n^2)$, mejorando significativamente respecto a una solución de fuerza bruta. Los resultados experimentales validan el análisis teórico, mostrando un crecimiento acorde a la complejidad esperada.
