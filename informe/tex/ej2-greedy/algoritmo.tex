@@ -1,0 +1,21 @@
+\subsection{Algoritmo}
+
+El algoritmo crea una matriz de adyacencia para representar un grafo, donde cada entrada $cost[i][j]$ almacena el costo de viajar desde el vértice $i$ al vértice $j$. 
+
+Inicialmente, todos los costos son cero. El usuario ingresa los costos de las aristas, y el programa los almacena en la matriz. Si un costo no se ingresa, se asume un valor predeterminado de 15000 (considerado infinito en este contexto). 
+
+Luego, la matriz se ajusta para que sea simétrica (el costo de $i$ a $j$ es el mismo que de $j$ a $i$), lo que indica que el grafo es no dirigido.
+
+El algoritmo luego solicita un vértice de salida $v$. A partir de este vértice, calcula las distancias más cortas a todos los demás vértices utilizando una variante del algoritmo de Dijkstra. 
+
+Mantiene un arreglo $dist$ donde $dist[i]$ almacena la distancia más corta conocida desde $v$ hasta $i$, y un arreglo $sol$ (solución) que marca qué vértices ya han sido visitados o "fijados" en el camino más corto. 
+
+Inicialmente, $dist[i]$ se establece con el costo directo desde el vértice de salida $v$ hasta cada vértice $i$, es decir, $dist[i]=cost[v][i]$, y luego se fija $dist[v]=0$.
+
+Enunciamos que el algoritmo se parece al algoritmo de Dijkstra porque, en cada iteración, selecciona entre los vértices no resueltos aquel cuya distancia tentativa al origen es mínima, lo marca como definitivo y luego intenta mejorar las distancias al resto pasando por él. Esta es exactamente la idea central del algoritmo de Dijkstra para caminos mínimos desde una única fuente en grafos con pesos no negativos.
+
+Las estructuras de datos que utiliza son una matriz de adyacencia y dos arreglos. La matriz de adyacencia se utiliza para almacenar los costos de las aristas, y los arreglos se utilizan para almacenar las distancias más cortas y los vértices visitados. En particular, la matriz $cost$ permite consultar en tiempo constante el peso de cualquier arista, el arreglo $dist$ guarda las mejores distancias encontradas hasta el momento, y el arreglo $sol$ permite distinguir qué vértices ya fueron incorporados definitivamente a la solución.
+
+Lo consideramos un algoritmo greedy porque en cada paso toma una decisión localmente óptima: elige el vértice no resuelto con menor distancia tentativa desde el origen. Esa es la regla voraz que aplica el algoritmo: seleccionar siempre el siguiente vértice más cercano no procesado, asumiendo que esa elección conduce a una solución óptima global. Luego de fijarlo, actualiza las distancias hacia los demás vértices si encuentra un camino más corto pasando por él.
+
+La complejidad temporal del algoritmo es $O(n^2)$ y la complejidad espacial es $O(n^2)$. Porque la estructura principal es una matriz de adyacencia de tamaño $n \times n$, lo que domina el uso de memoria. Además, el algoritmo principal realiza, para cada uno de los $n$ vértices, una búsqueda lineal del próximo vértice a fijar y otra recorrida lineal para relajar distancias, dando en total un tiempo cuadrático. Los arreglos auxiliares ocupan solo $O(n)$, pero quedan dominados por la matriz de costos.
