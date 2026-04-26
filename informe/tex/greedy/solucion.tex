@@ -1,16 +1,15 @@
 \section{Ejercicio \#2: Algoritmo Paolo}
 
-\subsection{Introducción y problema}
+Se tiene un algoritmo escrito en un lenguaje inusual, el objetivo es el de identificar el problema que resuelve, analizando su comportamiento greedy, 
+el uso de estructuras de datos y la complejidad del mismo.
 
-El algoritmo "paolo", encontrado por el equipo de antropología, está escrito en un lenguaje inusual. El objetivo del ejercicio es identificar el
-problema que resuelve, reconocer el algoritmo que replica y justificar su carácter greedy, además de analizar el uso de estructuras de datos y la
-complejidad.
+Adicionalmente, el algoritmo será traducido a un lenguaje de progamación más moderno, Python.
 
-El problema que resuelve el código es el de caminos mínimos desde un único origen en un grafo no dirigido con pesos no negativos.
 
 \subsection{Algoritmo}
 
-El código original se presenta a continuación:
+El problema resuelto por el algoritmo es el de caminos mínimos desde un único origen en un grafo no dirigido con pesos no negativos. El mismo fue 
+implementado con el siguiente código:
 
 \lstinputlisting[language={[Visual]Basic}, caption={Algoritmo Paolo original}]{code/paolo.bas}
 
@@ -18,12 +17,12 @@ Su traducción más literal a un lenguaje moderno (Python) es:
 
 \lstinputlisting[language=Python, caption={Algoritmo Paolo traducido}]{code/paolo.py}
 
-El algoritmo crea una matriz de adyacencia para representar un grafo, donde cada entrada $cost[i][j]$ almacena el costo de viajar desde el vértice
+El algoritmo crea una matriz de adyacencia para representar al grafo, donde cada entrada $cost[i][j]$ almacena el costo de viajar desde el vértice
 $i$ al vértice $j$. Si un costo no se ingresa, se asume un valor predeterminado de 15000 (considerado infinito en este contexto). Luego, la matriz se
 ajusta para que sea simétrica, lo que indica que el grafo es no dirigido.
 
 A partir de un vértice de salida $v$, calcula las distancias más cortas a todos los demás vértices utilizando una variante del algoritmo de Dijkstra.
-En cada iteración, selecciona el vértice no resuelto con menor distancia y actualiza las distancias del resto usando ese vértice como punto de partida.
+En cada iteración, selecciona el vértice no visitado con menor distancia y actualiza las distancias del resto usando ese vértice como punto de partida.
 
 \subsection{Estructuras de datos}
 
@@ -31,10 +30,11 @@ Se utilizan una matriz de adyacencia y dos arreglos. La matriz $cost$ permite co
 $dist$ guarda las mejores distancias encontradas hasta el momento, y el arreglo $sol$ indica qué vértices ya fueron incorporados definitivamente a la
 solución.
 
-\subsection{Justificación Greedy}
+\subsection{Naturaleza Greedy del algoritmo}
 
-El algoritmo es greedy porque en cada paso toma una decisión local: elige el vértice no visitado con menor distancia estimada desde el origen. Esa
-regla greedy coincide con la estrategia central de Dijkstra para caminos mínimos con pesos no negativos.
+En cada paso del algoritmo se toma la misma decisión, se elige el vertice no visitado con menor distancia desde el origen, esta regla consituye una
+regla Greedy ya que se está tomando una decisión en base a un óptimo local ("cual es la menor distancia a la que me puedo mover"), la cual en conjunto 
+al resto de pasos del algoritmo que replican la misma regla buscan acercarse al óptimo global.
 
 \subsection{Complejidad temporal y espacial}
 

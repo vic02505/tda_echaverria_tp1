@@ -1,46 +1,53 @@
 \section{Ejercio \#1: Comparación de Monedas}
 
-\subsection{Introducción y Problema}
+\subsection{Problema a resolver}
 
-Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto. El objetivo es 
-identificar la moneda falsa sin ordenar por peso y usando División y Conquista.
+Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto. 
+El objetivo es identificar la moneda falsa sin ordenar por peso y usando División y Conquista.
 
-La entrada se representa como una lista de pesos en un archivo de texto con valores separados por comas. Se asume que todos los pesos 
-verdaderos son iguales (por ejemplo 10) y la falsa es más liviana (por ejemplo 4).
 
 \subsection{Algoritmo de División y Conquista}
 
-El algoritmo divide el arreglo en mitades. En cada paso compara las monedas de las posiciones centrales:
+La entrada del algoritmo es una lista de monedas representadas por su peso. Se asume que todos los pesos son iguales, a
+excepción del peso de la moneda falsa.
+
+El algoritmo divide la lista en dos. En cada paso compara las monedas de las posiciones centrales:
 
 \begin{enumerate}
 	\item Si las dos monedas centrales son distintas, la más liviana es la falsa.
-	\item Si son iguales, se recurre sobre ambas mitades y luego se elige el mínimo entre los resultados.
+	\item Si son iguales, se llama recursivamente a las dos partes y se repite el algoritmo.
 \end{enumerate}
 
-Cada comparación de dos monedas se contabiliza como una pesada. La función principal parsea el archivo, llama al algoritmo y reporta tiempo y 
-cantidad de pesadas.
+La cantidad de pesadas se contabiliza con cada comparación entre dos monedas, representando la cantidad de veces que se pesan
+dos monedas hasta conseguir la falsa.
 
-El código del algoritmo de División y Conquista es:
+El código del algoritmo implementado para resolver el problema es:
 
 \lstinputlisting[language=Python]{code/monedas_dyc.py}
 
 \subsection{Complejidad temporal y cantidad de pesadas}
 
-Sea $T(n)$ el tiempo del algoritmo. La recurrencia es:
+Dado que el algoritmo se trata de un algoritmo de Divide y Conquista, la complejidad viene determinada por la ecuación de 
+recurrencia del mismo:
 
-$$T(n) = 2T(n/2) + O(1)$$
+$T(n) = A.T(n/B) + O(n^{C})$
 
-La ecuación se justifica porque en cada llamada se divide el problema en dos subproblemas de tamaño $n/2$ (dos llamadas recursivas) y el costo adicional de comparar y seleccionar resultados es constante, es decir, $O(1)$.
+Donde, $A = 2$ debido a que se hacen dos llamadas recursivas en cada paso, $B = 2$ porque en cada paso el algoritmo parte el
+problema en dos, y $C = 0$ porque los costos adicionales incurridos en cada paso son $O(1)$.
 
-Por el Teorema Maestro, $Complejidad = O(n)$. 
+La ecuación de recurrencia resultante es:
 
-\subsection{Metodología adoptadal}
+$T(n) = 2T(n/2) + O(1)$
 
-Se evaluó el algoritmo con tamaños $n = \{100, 500, 1000, 5000, 10000, 50000\}$. Para cada tamaño se generó un 
+Por el teorema maestro, la complejidad del algoritmo es: $O(n)$
+
+\subsection{Metodología adoptada}
+
+Se evaluó el algoritmo con sets de datos de distintos tamaños $n = \{100, 500,\allowbreak 1000,\allowbreak 5000,\allowbreak 10000,\allowbreak 50000\}$. Para cada tamaño se generó un 
 archivo con una única moneda falsa y se ejecutó:
 
 \begin{verbatim}
-python3 ejercicios/ej-dyc/monedas.py 100
+python3 ejercicios/ej-dyc/monedas.py <tamaño_set_de_datos>
 \end{verbatim}
 
 El tiempo se midió con la función time del sistema y se registró la cantidad de pesadas. Los resultados se 
@@ -64,11 +71,11 @@ guardaron en una tabla y se graficaron junto con una curva teórica lineal $O(n)
 	\label{fig:ej1-pesadas}
 \end{figure}
 
-Los gráficos muestran un crecimiento cercano al lineal, consistente con la complejidad analizada. La curva teórica se escaló para superponerla con la serie medida.
+Los gráficos muestran un crecimiento cercano al lineal, consistente con la complejidad analizada. La curva teórica se escaló para 
+superponerla con la curva empírica obtenida a partir de la ejecución del algoritmo con distintos sets de datos.
 
 \subsection{Relación entre tiempo de ejecución y pesadas}
 
-Es razonable vincular el tiempo con la cantidad de pesadas porque cada pesada implica una comparación de pesos, y 
-el algoritmo realiza un número lineal de comparaciones. Sin embargo, el tiempo también incluye costos de lectura de datos 
-y llamadas recursivas, por lo que la relación no es perfectamente proporcional. Aun así, ambos indicadores reflejan el 
-mismo orden de crecimiento $O(n)$.
+Es razonable vincular el tiempo de ejecución del algoritmo con la cantidad de pesadas debido a que cada paso del algoritmo implica realizar una 
+cantidad constante de pesadas, y  el algoritmo tiene un crecimiento lineal, por lo tanto la cantidad de pasadas crece de forma proporcional al algoritmo,
+es decir, linealmente ($O(n)$).
