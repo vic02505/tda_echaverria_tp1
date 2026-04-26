@@ -56,8 +56,8 @@ pal[i][j] = (S[i] = S[j]) \land (j - i \leq 1 \lor pal[i+1][j-1])
 
 Esta permite evaluar si el string que va desde $i$ hasta $j$ es un palíndromo. 
 
-La matriz sive como estructura de datos auxiliar para el calculo de la cantidad mínima de palíndromos para cada tamaño  de subproblemas, evitando 
-realizar calculos de forma repetitiva.
+La matriz sirve como estructura de datos auxiliar para el cálculo de la cantidad mínima de palíndromos para cada tamaño  de subproblemas, evitando 
+realizar cálculos de forma repetitiva.
 
 \subsubsection{Subestructura Óptima}
 
@@ -76,10 +76,10 @@ Se utilizan:
     \item Lista $dp[n]$
 \end{itemize}
 
-La matriz, tal como se comento en la sección "Preprocesamiento de Palíndromos" se usa para almacenar que subtrings del string original son 
+La matriz, tal como se comentó en la sección "Preprocesamiento de Palíndromos" se usa para almacenar que substrings del string original son 
 palíndromos. La lista de óptimos almacena la mínima cantidad de palíndromos para todos los substrings de la forma $[0...i]$.
 
-La principal diferencia con la matriz, es que la matriz guarda todas las combinaciones de sub string, y la ecuación de recurrencia solo los de van 
+La principal diferencia con la matriz, es que la matriz guarda todas las combinaciones de substring, y la ecuación de recurrencia solo los que van 
 de $0$ hasta $i$ (subproblemas del algoritmo).
 
 \subsubsection{Pseudocódigo}
@@ -130,7 +130,7 @@ Resultado: 1 partición.
 \subsection{Complejidad}
 
 Para analizar la complejidad del algoritmo es necesario considerar la complejidad incurrida en cada parte del mismo. Se cuentan con dos partes
-princiaples, el armado de la matriz y el calculo de los óptimos de partir de la ecuación de recurrencia.
+principales, el armado de la matriz y el cálculo de los óptimos a partir de la ecuación de recurrencia.
 
 \begin{itemize}
     \item Cálculo de palíndromos: $O(n^2)$

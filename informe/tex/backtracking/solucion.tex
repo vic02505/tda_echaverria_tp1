@@ -2,11 +2,15 @@
 
 \subsection{Introducción y Problema}
 
-En este ejercicio se modela el recorrido de una aspiradora robot dentro de un laberinto rectangular. El laberinto se representa mediante una matriz, donde cada celda puede corresponder a una pared (\textit{X}), una posición transitable, la entrada (\textit{E}) o la salida (\textit{S}).
+En este ejercicio se modela el recorrido de una aspiradora robot dentro de un laberinto rectangular. El laberinto se representa mediante una matriz, 
+donde cada celda puede corresponder a una pared (\textit{X}), una posición transitable, la entrada (\textit{E}) o la salida (\textit{S}).
 
-El objetivo es diseñar, implementar y documentar un algoritmo de backtracking que, dado un laberinto de tamaño $m \times n$, encuentre un camino válido desde la posición inicial \textit{E} hasta la salida \textit{S}, en caso de que dicho camino exista.
+El objetivo es diseñar, implementar y documentar un algoritmo de backtracking que, dado un laberinto de tamaño $m \times n$, encuentre un camino 
+válido desde la posición inicial \textit{E} hasta la salida \textit{S}, en caso de que dicho camino exista.
 
-La solución devuelve el recorrido como una secuencia de coordenadas de la matriz. A partir de ese camino, pueden interpretarse los movimientos que debería realizar la aspiradora para desplazarse por el laberinto, utilizando sus operaciones disponibles: observar la celda siguiente, avanzar y girar.
+La solución devuelve el recorrido como una secuencia de coordenadas de la matriz. A partir de ese camino, pueden interpretarse 
+los movimientos que debería realizar la aspiradora para desplazarse por el laberinto, utilizando sus operaciones disponibles: 
+observar la celda siguiente, avanzar y girar.
 
 \subsection{Algoritmo de Backtracking}
 
@@ -83,7 +87,7 @@ Las posiciones se indican con índices base cero. Por lo tanto, la entrada \text
 
 En el laberinto analizado, la entrada \textit{E} se encuentra en la posición $(5,1)$ y la salida \textit{S} en la posición $(1,7)$.
 
-A partir de ahi, continúa explorando recursivamente las posiciones válidas. Cada celda recorrida se agrega a la solución y se marca como visitada. Cuando una rama no permite llegar a la salida, el algoritmo retrocede y prueba otra dirección.
+A partir de ahí, continúa explorando recursivamente las posiciones válidas. Cada celda recorrida se agrega a la solución y se marca como visitada. Cuando una rama no permite llegar a la salida, el algoritmo retrocede y prueba otra dirección.
 
 El camino devuelto para este caso es:
 
