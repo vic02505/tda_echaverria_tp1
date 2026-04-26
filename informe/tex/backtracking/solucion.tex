@@ -1,0 +1,147 @@
+\section{Ejercicio \#3: Algoritmo Aspiradora Robot}
+
+\subsection{Introducción y Problema}
+
+En este ejercicio se modela el recorrido de una aspiradora robot dentro de un laberinto rectangular. El laberinto se representa mediante una matriz, donde cada celda puede corresponder a una pared (\textit{X}), una posición transitable, la entrada (\textit{E}) o la salida (\textit{S}).
+
+El objetivo es diseñar, implementar y documentar un algoritmo de backtracking que, dado un laberinto de tamaño $m \times n$, encuentre un camino válido desde la posición inicial \textit{E} hasta la salida \textit{S}, en caso de que dicho camino exista.
+
+La solución devuelve el recorrido como una secuencia de coordenadas de la matriz. A partir de ese camino, pueden interpretarse los movimientos que debería realizar la aspiradora para desplazarse por el laberinto, utilizando sus operaciones disponibles: observar la celda siguiente, avanzar y girar.
+
+\subsection{Algoritmo de Backtracking}
+
+El problema se resuelve mediante backtracking. Desde la entrada \textit{E}, el algoritmo intenta avanzar recursivamente hacia las posiciones vecinas en un orden fijo: derecha, izquierda, abajo y arriba.
+
+Antes de avanzar, se verifica que la celda esté dentro de los límites, que no sea una pared \textit{X} y que no haya sido visitada previamente. Si la celda es válida, se agrega a la solución y se marca como visitada.
+
+Cuando se alcanza la salida \textit{S}, se devuelve el camino encontrado. Si desde una posición no se puede continuar hacia la salida, se elimina esa posición de la solución y se vuelve atrás para probar otra alternativa.
+
+\subsection{Supuestos}
+
+Se asume que el laberinto es rectangular, por lo que todas sus filas tienen la misma cantidad de columnas. Sus dimensiones se obtienen a partir del archivo de entrada.
+
+También se asume que existe una única posición inicial \textit{E} y al menos una salida \textit{S}. Las celdas marcadas con \textit{X} representan paredes y no pueden ser recorridas. Del mismo modo, cualquier posición fuera de los límites del laberinto se considera inválida.
+
+En caso de que no exista un camino posible entre la entrada y la salida, el algoritmo devuelve una lista vacía.
+
+\subsection{Diseño}
+
+La solución se basa en un algoritmo recursivo de backtracking. En cada llamada se analiza una posición del laberinto y se verifica si puede ser recorrida. Una posición es válida si está dentro de los límites de la matriz, no corresponde a una pared y no fue visitada anteriormente.
+
+Si la posición es válida, se agrega a la solución y se marca como visitada. Luego se prueban las cuatro direcciones posibles en un orden fijo: derecha, izquierda, abajo y arriba. Si alguna de esas ramas alcanza la salida, el algoritmo termina y devuelve el camino encontrado. En caso contrario, se elimina la posición actual de la solución y se retrocede para probar otras alternativas.
+
+Las estructuras de datos utilizadas son:
+
+\begin{itemize}
+    \item Una matriz de caracteres para representar el laberinto.
+    \item Una lista con la solución construida hasta el momento.
+    \item Un conjunto de posiciones visitadas para evitar ciclos y no recorrer dos veces la misma celda.
+\end{itemize}
+
+En pseudocódigo:
+
+\begin{verbatim}
+encontrar_camino(laberinto):
+    buscar la posicion E
+    si no existe, devolver []
+
+    camino = lista vacia
+    visitados = conjunto vacio
+
+    si explorar(E, camino, visitados) es verdadero:
+        devolver camino
+
+    devolver []
+
+explorar(pos, camino, visitados):
+    si pos es invalida, pared o ya fue visitada:
+        devolver falso
+
+    agregar pos al camino
+    agregar pos a visitados
+
+    si pos es S:
+        devolver verdadero
+
+    para cada direccion en [derecha, izquierda, abajo, arriba]:
+        nueva_pos = pos + direccion
+
+        si explorar(nueva_pos, camino, visitados) es verdadero:
+            devolver verdadero
+
+    quitar pos del camino
+    devolver falso
+\end{verbatim}
+
+La implementación concreta del ejercicio se encuentra en \textit{ejercicios/ej-backtracking/ejercicio\_3.py}. La función \textit{avanzar} concentra la lógica recursiva del backtracking, mientras que \textit{encontrar\_camino\_bt} busca la posición inicial y actúa como punto de entrada del algoritmo.
+
+\subsection{Seguimiento}
+
+Para el seguimiento se toma el archivo \textit{laberinto1.txt}.
+
+Las posiciones se indican con índices base cero. Por lo tanto, la entrada \textit{E} se encuentra en la posición $(5,1)$ y la salida \textit{S} en la posición $(1,7)$.
+
+En el laberinto analizado, la entrada \textit{E} se encuentra en la posición $(5,1)$ y la salida \textit{S} en la posición $(1,7)$.
+
+A partir de ahi, continúa explorando recursivamente las posiciones válidas. Cada celda recorrida se agrega a la solución y se marca como visitada. Cuando una rama no permite llegar a la salida, el algoritmo retrocede y prueba otra dirección.
+
+El camino devuelto para este caso es:
+
+\begin{verbatim}
+[(5, 1), (4, 1), (3, 1), (3, 2), (3, 3), (4, 3), (4, 4),
+ (4, 5), (4, 6), (3, 6), (2, 6), (1, 6), (1, 7)]
+\end{verbatim}
+
+Este resultado muestra que el algoritmo encuentra un camino válido desde la entrada hasta la salida, sin atravesar paredes ni repetir celdas.
+
+\subsection{Resultados experimentales}
+
+Para validar el comportamiento del algoritmo, se ejecutó la solución sobre cinco conjuntos de datos con laberintos de distinto tamaño. En todos los casos, el algoritmo finalizó correctamente y devolvió un camino válido desde la entrada \textit{E} hasta la salida \textit{S}.
+
+Los tiempos de ejecución obtenidos fueron los siguientes:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Caso & Tiempo de ejecución \\
+\hline
+Laberinto 1 & $79.209$ $\mu$s \\
+Laberinto 2 & $88.500$ $\mu$s \\
+Laberinto 3 & $117.834$ $\mu$s \\
+Laberinto 4 & $172.042$ $\mu$s \\
+Laberinto 5 & $202.000$ $\mu$s \\
+\hline
+\end{tabular}
+\end{center}
+
+A continuación se presenta un gráfico comparativo de los tiempos medidos para cada conjunto de datos.
+
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{img/ej3_tiempos.png}
+\end{center}
+
+Como se observa en la tabla y en el gráfico, los tiempos de ejecución presentan una tendencia creciente a medida que aumenta el tamaño de los laberintos. Esto resulta coherente con el análisis teórico, ya que para entradas más grandes el algoritmo puede requerir explorar una mayor cantidad de posiciones antes de encontrar la salida.
+
+\subsection{Complejidad temporal y espacial}
+
+Sea $m$ la cantidad de filas del laberinto y $n$ la cantidad de columnas. En el peor caso, el algoritmo puede llegar a analizar todas las celdas de la matriz.
+
+Como las posiciones visitadas se almacenan en un conjunto, cada celda se analiza a lo sumo una vez y la consulta para saber si ya fue visitada tiene costo promedio $O(1)$. Para cada posición válida se prueban hasta cuatro direcciones posibles: derecha, izquierda, abajo y arriba. Como la cantidad de direcciones es constante, la complejidad temporal resulta:
+
+\[
+O(mn)
+\]
+
+La complejidad espacial también es $O(mn)$. Esto se debe a que el algoritmo almacena la solución y el conjunto de posiciones visitadas. En el peor caso, ambas estructuras pueden crecer proporcionalmente a la cantidad total de celdas del laberinto.
+
+Por lo tanto, tanto la complejidad temporal como la espacial del algoritmo son $O(mn)$.
+
+\subsection{Relación con los resultados}
+
+Los tiempos medidos son bajos, por lo que pueden verse afectados en parte por factores propios de la ejecución y de la medición. Sin embargo, al considerar los cinco conjuntos de datos, se observa una tendencia creciente a medida que aumenta el tamaño del laberinto.
+
+Estos resultados son compatibles con la complejidad temporal, $O(mn)$, ya que el algoritmo recorre como máximo una vez cada celda del laberinto y, para cada una, prueba una cantidad constante de direcciones.
+
+De todos modos, el tiempo de ejecución no depende únicamente de la cantidad total de celdas, sino también de la distribución de paredes y de la ubicación de la salida. Si la salida se encuentra rápidamente, el algoritmo puede finalizar sin recorrer toda la matriz. En cambio, si el camino requiere explorar más alternativas, el tiempo aumenta.
+
+Por lo tanto, los resultados experimentales acompañan el análisis teórico: en los casos evaluados, al aumentar el tamaño del laberinto también aumenta el tiempo de ejecución, manteniéndose dentro del comportamiento esperado para una búsqueda con backtracking sobre una matriz.
