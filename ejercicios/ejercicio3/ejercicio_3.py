@@ -4,13 +4,16 @@ import time
 
 def obtener_inicio(laberinto):
     for fila in range(0,len(laberinto)):
-        for columna in range(0,len(laberinto[0])):
+        for columna in range(0,len(laberinto[fila])):
             if laberinto[fila][columna]== "E":
                 return (fila,columna)
     return (None,None)
 
 def avanzar(laberinto,fila,columna,resultado,visitados):
-    if (fila < 0 or columna < 0 or fila >= len(laberinto) or columna >= len(laberinto[0])
+    if fila < 0 or fila >= len(laberinto):
+        return resultado
+
+    if (columna < 0 or columna >= len(laberinto[fila])
         or laberinto[fila][columna] == "X" or (fila,columna) in visitados):
         return resultado
     
@@ -67,6 +70,7 @@ def main():
     archivo_output_str = sys.argv[2]
     laberinto = obtener_laberinto_desde_archivo(archivo_input_str)
     t1 = time.time()
+    print(f"celdas: {len(laberinto) * len(laberinto[0])}")
     resultado = encontrar_camino_bt(laberinto)
     t2 = time.time()
     print(t2 - t1)

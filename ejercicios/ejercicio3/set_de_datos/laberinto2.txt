@@ -1,6 +1,14 @@
-XXXXXXSXXXXX
-X   X  X   X
-X XXXX X X X
-X   XX X X X
-X X        X
-XEXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X   X  X   XX XX    X               XXX XX S
+X XXXX X X XX  XXX XXXXXXXXXXXXXXXX XX  X  X
+X   XX X X XXX XX   XXXXXXXXXXXXXXX        X 
+X X                 X             X        X
+XEXXXXXXXXX XXXXXXX X             X        X
+XXXXXXXXXXX   XX                  X XX     X
+XXXXXXXXXXX X       X                      X
+XXXXXXXXXXX XXX XXXXX                      X
+X                XXXX                      X
+X XXXXXXXXX XX   XX X                      X
+X X         X       X                      X
+X XXXXXXXXX X       X                      X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
