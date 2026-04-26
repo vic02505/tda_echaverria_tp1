@@ -1,14 +1,10 @@
-from lectura_escritura_de_archivos import obtener_laberinto_desde_archivo, guardar_resultado
-import sys
-import time
-
-
 DIRECCIONES = (
     (0, 1),
     (0, -1),
     (1, 0),
     (-1, 0),
 )
+
 
 def obtener_inicio(laberinto):
     if not laberinto:
@@ -68,34 +64,10 @@ def encontrar_camino_bt(laberinto):
         fila_inicial,
         columna_inicial,
         resultado,
-        visitados
+        visitados,
     )
 
     if encontro_salida:
         return resultado
 
     return []
-
-
-def main():
-    if len(sys.argv) != 3:
-        print("Error: parametros incorrectos. La ejecucion debe ser en formato:")
-        print("python3 ejercicios/ejercicio_3/ejercicio_3.py <archivo_input> <archivo_output>")
-        sys.exit(1)
-
-    archivo_input_str = sys.argv[1]
-    archivo_output_str = sys.argv[2]
-
-    laberinto = obtener_laberinto_desde_archivo(archivo_input_str)
-
-    t1 = time.perf_counter()
-    resultado = encontrar_camino_bt(laberinto)
-    t2 = time.perf_counter()
-
-    print(t2 - t1)
-
-    guardar_resultado(resultado, archivo_output_str)
-
-
-if __name__ == "__main__":
-    main()

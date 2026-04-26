@@ -42,42 +42,11 @@ Las estructuras de datos utilizadas son:
     \item Un conjunto de posiciones visitadas para evitar ciclos y no recorrer dos veces la misma celda.
 \end{itemize}
 
-En pseudocódigo:
+Código en Python:
 
-\begin{verbatim}
-encontrar_camino(laberinto):
-    buscar la posicion E
-    si no existe, devolver []
+\lstinputlisting[language=Python]{code/laberinto.py}
 
-    camino = lista vacia
-    visitados = conjunto vacio
-
-    si explorar(E, camino, visitados) es verdadero:
-        devolver camino
-
-    devolver []
-
-explorar(pos, camino, visitados):
-    si pos es invalida, pared o ya fue visitada:
-        devolver falso
-
-    agregar pos al camino
-    agregar pos a visitados
-
-    si pos es S:
-        devolver verdadero
-
-    para cada direccion en [derecha, izquierda, abajo, arriba]:
-        nueva_pos = pos + direccion
-
-        si explorar(nueva_pos, camino, visitados) es verdadero:
-            devolver verdadero
-
-    quitar pos del camino
-    devolver falso
-\end{verbatim}
-
-La implementación concreta del ejercicio se encuentra en \textit{ejercicios/ej-backtracking/ejercicio\_3.py}. La función \textit{avanzar} concentra la lógica recursiva del backtracking, mientras que \textit{encontrar\_camino\_bt} busca la posición inicial y actúa como punto de entrada del algoritmo.
+El código del algoritmo se encuentra en \textit{code/laberinto.py}. La función \textit{avanzar} concentra la lógica recursiva del backtracking, mientras que \textit{encontrar\_camino\_bt} busca la posición inicial y actúa como punto de entrada del algoritmo.
 
 \subsection{Seguimiento}
 
@@ -100,7 +69,7 @@ Este resultado muestra que el algoritmo encuentra un camino válido desde la ent
 
 \subsection{Resultados experimentales}
 
-Para validar el comportamiento del algoritmo, se ejecutó la solución sobre cinco conjuntos de datos con laberintos de distinto tamaño. En todos los casos, el algoritmo finalizó correctamente y devolvió un camino válido desde la entrada \textit{E} hasta la salida \textit{S}.
+Para validar el comportamiento del algoritmo, se ejecutó la solución sobre cinco conjuntos de datos con laberintos de distinto tamaño. En todos los casos, el algoritmo finalizó correctamente y devolvió un camino válido desde la entrada \textit{E} hasta la salida \textit{S}. Para las mediciones se utilizó el módulo \textit{ejercicios/ej-backtracking/laberinto\_informe.py}, que imprime el tiempo de ejecución.
 
 Los tiempos de ejecución obtenidos fueron los siguientes:
 
