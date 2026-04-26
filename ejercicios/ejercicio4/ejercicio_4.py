@@ -38,6 +38,7 @@ def min_palindromos(S):
 
     return dp[n - 1]
 
+print(min_palindromos("alala"))
 
 # ==============================
 # GENERADOR DE DATOS
