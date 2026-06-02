@@ -5,24 +5,24 @@ import time
 
 
 def encontrar_moneda_falsa_dyc(monedas, inicio, fin, contador):
-    if inicio >= fin:
+    # caso 1 sola moneda
+    if fin == inicio:
+        contador[0] += 1
         return monedas[inicio]
 
+    # caso 2 monedas seguidas
     if fin - inicio == 1:
         contador[0] += 1
         return monedas[inicio] if monedas[inicio] <= monedas[fin] else monedas[fin]
 
     medio = (inicio + fin) // 2
-
+    prom_izq = sum(monedas[inicio : medio ]) / (medio - inicio)
+    prom_der = sum(monedas[medio : fin ]) / (fin - medio )
     contador[0] += 1
-    if monedas[medio] != monedas[medio + 1]:
-        return monedas[medio] if monedas[medio] < monedas[medio + 1] else monedas[medio + 1]
 
-    izquierdo = encontrar_moneda_falsa_dyc(monedas, inicio, medio, contador)
-    derecho = encontrar_moneda_falsa_dyc(monedas, medio + 1, fin, contador)
-
-    contador[0] += 1
-    return izquierdo if izquierdo <= derecho else derecho
+    if prom_izq < prom_der:
+        return encontrar_moneda_falsa_dyc(monedas, inicio, medio, contador)
+    return encontrar_moneda_falsa_dyc(monedas, medio, fin, contador)
 
 
 def encontrar_moneda_falsa(monedas):
@@ -66,7 +66,7 @@ def main(argv):
 
     print(f"Moneda falsa: {moneda_falsa}")
     print(f"Pesadas: {pesadas}")
-    print(f"Tiempo: {fin - inicio:.6f} s")
+    print(f"Tiempo: {fin - inicio:.8f} s")
     return 0
 
 
