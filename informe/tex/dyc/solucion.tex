@@ -3,26 +3,36 @@
 \subsection{Problema a resolver}
 
 Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto. 
-El objetivo es identificar la moneda falsa sin ordenar por peso y usando División y Conquista.
+El objetivo es identificar la moneda falsa sin ordenar por peso y haciendo uso de División y Conquista.
 
 \subsection{Algoritmo de División y Conquista}
 
 La entrada del algoritmo es una lista de monedas representadas por su peso. Se asume que todos los pesos son iguales, a
-excepción del peso de la moneda falsa.
+excepción del peso de la moneda falsa, es decir: $[a, b, b, b, b, b, b]$
 
-El algoritmo divide la lista en dos. En cada paso compara las monedas de las posiciones centrales:
+En cada paso el algoritmo parte entrada en dos (a la lista) y calcula el promedio de cada parte.
 
 \begin{enumerate}
-	\item Si las dos monedas centrales son distintas, la más liviana es la falsa.
-	\item Si son iguales, se llama recursivamente a las dos partes y se repite el algoritmo.
+	\item Si el promedio izquierdo es menor al promedio derecho se vuelve a llamar al algoritmo pero usando a la parte
+	izquierda lista.
+	\item Si el promedio derecho es menor al promedio izquierdo se vuelve a llamar al algoritmo pero usando a la parte
+	derecha lista
 \end{enumerate}
 
-La cantidad de pesadas se contabiliza con cada comparación entre dos monedas, representando la cantidad de veces que se pesan
-dos monedas hasta conseguir la falsa.
+- Casos base:
 
-El código del algoritmo implementado para resolver el problema es:
+1. Si la lista es de longitud uno, se retorna como moneda a su único elemento.
 
-\lstinputlisting[language=Python]{code/monedas_dyc.py}
+2. Si la lista es de longitud dos se debe devolver la moneda de menor pesos entre los dos elementos.
+
+- Pesadas en el algoritmo:
+
+Las pesadas son las veces que se pesan monedas para encontrar a la moneda falsa. En el algoritmo se pesan las monedas cada
+vez que se calculan los promedios de cada una de las partes, y cuando la longitud de la lista de monedas es uno o dos.
+
+- Solución:
+
+\lstinputlisting[]{code/monedas.txt}
 
 \subsection{Complejidad temporal y cantidad de pesadas}
 
@@ -31,12 +41,13 @@ recurrencia del mismo:
 
 $T(n) = A.T(n/B) + O(n^{C})$
 
-Donde, $A = 2$ debido a que se hacen dos llamadas recursivas en cada paso, $B = 2$ porque en cada paso el algoritmo parte el
-problema en dos, y $C = 0$ porque los costos adicionales incurridos en cada paso son $O(1)$.
+Donde, $A = 1$ debido a que se hacen dos llamadas recursivas en cada paso, $B = 2$ porque en cada paso el algoritmo parte el
+problema en dos, y $C = 1$ porque los costos adicionales incurridos en cada paso vienen del calculo del promedio, el cual
+es $O(n)$.
 
 La ecuación de recurrencia resultante es:
 
-$T(n) = 2T(n/2) + O(1)$
+$T(n) = 1T(n/2) + O(n)$
 
 Por el teorema maestro, la complejidad del algoritmo es: $O(n)$
 
@@ -76,5 +87,5 @@ superponerla con la curva empírica obtenida a partir de la ejecución del algor
 \subsection{Relación entre tiempo de ejecución y pesadas}
 
 Es razonable vincular el tiempo de ejecución del algoritmo con la cantidad de pesadas debido a que cada paso del algoritmo implica realizar una 
-cantidad constante de pesadas, y  el algoritmo tiene un crecimiento lineal, por lo tanto la cantidad de pesadas crece de forma proporcional al algoritmo,
+cantidad constante de pesadas, y  el algoritmo tiene un crecimiento lineal, por lo tanto, la cantidad de pesadas crece de forma proporcional al algoritmo,
 es decir, linealmente ($O(n)$).

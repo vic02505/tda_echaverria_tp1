@@ -137,7 +137,7 @@ def main(argv):
         tiempos_teo,
         "Tiempo (s)",
         "Ejercicio 1 - Tiempo vs n",
-    )
+    )                       
     graficar_series(
         img_dir / "ej1_pesadas.png",
         sizes,
