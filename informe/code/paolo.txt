@@ -3,8 +3,8 @@ Algoritmo Paolo
     Leer n
 
     Crear matriz cost de n x n inicializada en 0
-    Crear vector dist de tamaño n inicializado en 0
-    Crear vector sol de tamaño n inicializado en 0
+    Crear vector dist de tamano n inicializado en 0
+    Crear vector sol de tamano n inicializado en 0
 
     Mostrar "Ingrese el cuadro de costos. Ingrese 0,0 para terminar"
 
@@ -16,35 +16,35 @@ Algoritmo Paolo
         FinSi
 
         Leer costo_eje
-        cost[a][b] ← costo_eje
+        cost[a][b] := costo_eje
     FinMientras
 
-    Para i ← 0 hasta n - 1 hacer
-        Para j ← 0 hasta n - 1 hacer
+    Para i := 0 hasta n - 1 hacer
+        Para j := 0 hasta n - 1 hacer
             Si cost[i][j] = 0 entonces
-                cost[i][j] ← 15000
+                cost[i][j] := 15000
             FinSi
         FinPara
     FinPara
 
-    Para i ← 0 hasta n - 1 hacer
-        Para j ← 0 hasta i - 1 hacer
-            cost[i][j] ← cost[j][i]
+    Para i := 0 hasta n - 1 hacer
+        Para j := 0 hasta i - 1 hacer
+            cost[i][j] := cost[j][i]
         FinPara
     FinPara
 
     Leer v
 
-    Para i ← 0 hasta n - 1 hacer
-        dist[i] ← cost[v][i]
-        sol[i] ← 0
+    Para i := 0 hasta n - 1 hacer
+        dist[i] := cost[v][i]
+        sol[i] := 0
     FinPara
 
     PaoloSub(n, cost, dist, sol, v)
 
     Mostrar "SALIDA", "LLEGADA", "DISTANCIA"
 
-    Para i ← 0 hasta n - 1 hacer
+    Para i := 0 hasta n - 1 hacer
         Si dist[i] < 15000 entonces
             Mostrar v, i, dist[i]
         FinSi
@@ -56,9 +56,9 @@ Algoritmo Paolo
         Terminar
     FinSi
 
-    Para i ← 0 hasta n - 1 hacer
-        sol[i] ← 0
-        dist[i] ← 0
+    Para i := 0 hasta n - 1 hacer
+        sol[i] := 0
+        dist[i] := 0
     FinPara
 
     Paolo
@@ -67,24 +67,24 @@ FinAlgoritmo
 
 Algoritmo PaoloSub(n, cost, dist, sol, v)
 
-    sol[v] ← 1
-    dist[v] ← 0
+    sol[v] := 1
+    dist[v] := 0
 
-    Para i ← 0 hasta n - 2 hacer
+    Para i := 0 hasta n - 2 hacer
 
-        u ← 15000
+        u := 15000
 
-        Para j ← 0 hasta n - 1 hacer
+        Para j := 0 hasta n - 1 hacer
             Si dist[j] <= u y sol[j] = 0 entonces
-                u ← j
+                u := j
             FinSi
         FinPara
 
-        sol[u] ← 1
+        sol[u] := 1
 
-        Para j ← 0 hasta n - 1 hacer
+        Para j := 0 hasta n - 1 hacer
             Si dist[j] >= dist[u] + cost[u][j] entonces
-                dist[j] ← dist[u] + cost[u][j]
+                dist[j] := dist[u] + cost[u][j]
             FinSi
         FinPara
 

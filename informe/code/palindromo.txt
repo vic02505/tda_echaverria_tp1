@@ -1,6 +1,6 @@
 Algoritmo MinPalindromos(S)
 
-    n ← longitud(S)
+    n := longitud(S)
 
     Si n = 0 entonces
         Retornar 0
@@ -8,32 +8,32 @@ Algoritmo MinPalindromos(S)
 
     Crear matriz pal de n x n inicializada en Falso
 
-    Para i ← 0 hasta n - 1 hacer
-        pal[i][i] ← Verdadero
+    Para i := 0 hasta n - 1 hacer
+        pal[i][i] := Verdadero
     FinPara
 
-    Para largo ← 2 hasta n hacer
-        Para i ← 0 hasta n - largo hacer
-            j ← i + largo - 1
+    Para largo := 2 hasta n hacer
+        Para i := 0 hasta n - largo hacer
+            j := i + largo - 1
 
             Si S[i] = S[j] y (largo = 2 o pal[i + 1][j - 1]) entonces
-                pal[i][j] ← Verdadero
+                pal[i][j] := Verdadero
             FinSi
         FinPara
     FinPara
 
-    Crear vector dp de tamaño n inicializado en 0
+    Crear vector dp de tamano n inicializado en 0
 
-    Para i ← 0 hasta n - 1 hacer
+    Para i := 0 hasta n - 1 hacer
 
         Si pal[0][i] entonces
-            dp[i] ← 1
+            dp[i] := 1
         Sino
-            dp[i] ← infinito
+            dp[i] := infinito
 
-            Para j ← 1 hasta i hacer
+            Para j := 1 hasta i hacer
                 Si pal[j][i] entonces
-                    dp[i] ← mínimo(dp[i], dp[j - 1] + 1)
+                    dp[i] := minimo(dp[i], dp[j - 1] + 1)
                 FinSi
             FinPara
         FinSi
