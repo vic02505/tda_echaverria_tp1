@@ -2,13 +2,13 @@ Algoritmo EncontrarMonedaFalsaDyC(monedas, inicio, fin, contador)
 
     // Caso: una sola moneda
     Si fin = inicio entonces
-        contador ← contador + 1
+        contador := contador + 1
         Retornar monedas[inicio]
     FinSi
 
     // Caso: dos monedas seguidas
     Si fin - inicio = 1 entonces
-        contador ← contador + 1
+        contador := contador + 1
 
         Si monedas[inicio] <= monedas[fin] entonces
             Retornar monedas[inicio]
@@ -17,12 +17,12 @@ Algoritmo EncontrarMonedaFalsaDyC(monedas, inicio, fin, contador)
         FinSi
     FinSi
 
-    medio ← (inicio + fin) / 2
+    medio := (inicio + fin) / 2
 
-    prom_izq ← suma(monedas desde inicio hasta medio - 1) / (medio - inicio)
-    prom_der ← suma(monedas desde medio hasta fin - 1) / (fin - medio)
+    prom_izq := suma(monedas desde inicio hasta medio - 1) / (medio - inicio)
+    prom_der := suma(monedas desde medio hasta fin - 1) / (fin - medio)
 
-    contador ← contador + 1
+    contador := contador + 1
 
     Si prom_izq < prom_der entonces
         Retornar EncontrarMonedaFalsaDyC(monedas, inicio, medio, contador)

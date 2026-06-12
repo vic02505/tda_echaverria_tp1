@@ -2,66 +2,99 @@
 
 \subsection{Problema a resolver}
 
-Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto. 
+Se tiene una bolsa con $n$ monedas de igual denominación, de las cuales exactamente una es falsa y es más liviana que el resto.
 El objetivo es identificar la moneda falsa sin ordenar por peso y haciendo uso de División y Conquista.
 
 \subsection{Algoritmo de División y Conquista}
 
 La entrada del algoritmo es una lista de monedas representadas por su peso. Se asume que todos los pesos son iguales, a
-excepción del peso de la moneda falsa, es decir: $[a, b, b, b, b, b, b]$
+excepción del peso de la moneda falsa, es decir: $[b, b, a, b, b]$ donde $a < b$.
 
-En cada paso el algoritmo parte entrada en dos (a la lista) y calcula el promedio de cada parte.
+En cada paso el algoritmo parte la lista en dos mitades y calcula el \textbf{promedio} de cada parte. Usar el promedio
+en lugar de la suma garantiza correctitud cuando $n$ es impar, ya que ambas mitades pueden tener tamaños distintos.
 
 \begin{enumerate}
-	\item Si el promedio izquierdo es menor al promedio derecho se vuelve a llamar al algoritmo pero usando a la parte
-	izquierda lista.
-	\item Si el promedio derecho es menor al promedio izquierdo se vuelve a llamar al algoritmo pero usando a la parte
-	derecha lista
+	\item Si el promedio izquierdo es menor al promedio derecho, la moneda falsa está en la mitad izquierda: se recursa sobre ella.
+	\item Si el promedio derecho es menor al promedio izquierdo, la moneda falsa está en la mitad derecha: se recursa sobre ella.
 \end{enumerate}
 
-- Casos base:
+Casos base:
 
-1. Si la lista es de longitud uno, se retorna como moneda a su único elemento.
+\begin{enumerate}
+	\item Si la lista tiene longitud uno, se retorna ese único elemento como la moneda falsa.
+	\item Si la lista tiene longitud dos, se retorna la moneda de menor peso entre los dos elementos.
+\end{enumerate}
 
-2. Si la lista es de longitud dos se debe devolver la moneda de menor pesos entre los dos elementos.
+\textbf{Pesadas en el algoritmo:}
 
-- Pesadas en el algoritmo:
+Las pesadas son la cantidad de veces que se usa la balanza para comparar grupos de monedas. En el algoritmo se registra
+una pesada cada vez que se calculan y comparan los promedios de ambas mitades, y también en los casos base (listas de
+longitud uno o dos).
 
-Las pesadas son las veces que se pesan monedas para encontrar a la moneda falsa. En el algoritmo se pesan las monedas cada
-vez que se calculan los promedios de cada una de las partes, y cuando la longitud de la lista de monedas es uno o dos.
-
-- Solución:
+\textbf{Solución:}
 
 \lstinputlisting[]{code/monedas.txt}
 
 \subsection{Complejidad temporal y cantidad de pesadas}
 
-Dado que el algoritmo se trata de un algoritmo de Divide y Conquista, la complejidad viene determinada por la ecuación de 
-recurrencia del mismo:
-
-$T(n) = A.T(n/B) + O(n^{C})$
-
-Donde, $A = 1$ debido a que se hacen dos llamadas recursivas en cada paso, $B = 2$ porque en cada paso el algoritmo parte el
-problema en dos, y $C = 1$ porque los costos adicionales incurridos en cada paso vienen del calculo del promedio, el cual
-es $O(n)$.
+El algoritmo es de Divide y Conquista con la siguiente estructura en cada llamada:
+\begin{itemize}
+	\item Se divide la lista en dos mitades: $O(1)$.
+	\item Se calcula el promedio de cada mitad con \texttt{sum()}: $O(n)$ en total.
+	\item Se recursa sobre \textbf{una sola} mitad.
+\end{itemize}
 
 La ecuación de recurrencia resultante es:
 
-$T(n) = 1T(n/2) + O(n)$
+\[
+T(n) = T\!\left(\frac{n}{2}\right) + O(n)
+\]
 
-Por el teorema maestro, la complejidad del algoritmo es: $O(n)$
+donde $A = 1$ (una sola llamada recursiva), $B = 2$ (el problema se divide a la mitad), y el costo adicional en cada nivel es $O(n)$ por el cálculo de \texttt{sum()} sobre ambas mitades.
+
+Aplicando el \textbf{Teorema Maestro} con $a=1$, $b=2$, $f(n)=n$:
+
+\[
+n^{\log_b a} = n^{\log_2 1} = n^0 = 1
+\]
+
+Como $f(n) = n = \Omega(n^{0+1})$, se aplica el \textbf{Caso 3}: el costo en la raíz del árbol de recursión domina
+a todos los niveles siguientes. La condición de regularidad se verifica:
+
+\[
+a \cdot f(n/b) = 1 \cdot \frac{n}{2} \leq \frac{1}{2} \cdot n \quad \checkmark
+\]
+
+Por lo tanto:
+
+\[
+\boxed{T(n) = O(n)}
+\]
+
+\textbf{Cantidad de pesadas:}
+
+Dado que el algoritmo recursa sobre una sola rama en cada nivel, la profundidad del árbol de recursión es
+$\lceil \log_2 n \rceil$, y se realiza exactamente una pesada por nivel. La cantidad de pesadas sigue:
+
+\[
+\text{Pesadas}(n) = O(\log_2 n)
+\]
 
 \subsection{Metodología adoptada}
 
-Se evaluó el algoritmo con sets de datos de distintos tamaños $n = \{100, 500,\allowbreak 1000,\allowbreak 5000,\allowbreak 10000,\allowbreak 50000\}$. Para cada tamaño se generó un 
-archivo con una única moneda falsa y se ejecutó:
+Se evaluó el algoritmo con sets de datos de distintos tamaños:
+\[
+n \in \{100,\ 500,\ 1000,\ 5000,\ 10000,\ 50000,\ 100000,\ 200000,\ 500000,\ 1000000\}
+\]
+Para cada tamaño se generó un archivo con $n$ monedas genuinas de peso 10 y una única moneda falsa de peso 4 en una
+posición aleatoria. El algoritmo se ejecutó con:
 
 \begin{verbatim}
 python3 ejercicios/ej-dyc/monedas.py <tamaño_set_de_datos>
 \end{verbatim}
 
-El tiempo se midió con la función time del sistema y se registró la cantidad de pesadas. Los resultados se 
-guardaron en una tabla y se graficaron junto con una curva teórica lineal $O(n)$.
+Para el análisis del \textit{notebook}, cada tamaño se ejecutó 20 veces y se registró el tiempo promedio, mínimo y
+máximo con \texttt{time.perf\_counter()}, junto con la cantidad de pesadas.
 
 \subsection{Resultados y gráficos}
 
@@ -69,23 +102,35 @@ guardaron en una tabla y se graficaron junto con una curva teórica lineal $O(n)
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.75\textwidth]{img/ej1_tiempos.png}
-	\caption{Tiempo de ejecución medido vs curva teórica $O(n)$.}
+	\includegraphics[width=0.85\textwidth]{img/ej1_tiempos.png}
+	\caption{Tiempo de ejecución en escala log-log con curvas de referencia $O(\log n)$, $O(n)$, $O(n \log n)$ y $O(n^2)$.
+	         Los datos siguen la recta de pendiente~1, confirmando $T(n) = O(n)$.}
 	\label{fig:ej1-tiempos}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.75\textwidth]{img/ej1_pesadas.png}
-	\caption{Cantidad de pesadas medida vs curva teórica $O(n)$.}
+	\includegraphics[width=0.85\textwidth]{img/ej1_pesadas.png}
+	\caption{Cantidad de pesadas vs tamaño del array en escala semi-log.
+	         Los puntos se alinean sobre la curva $c \cdot \log_2 n$, confirmando $\text{Pesadas}(n) = O(\log_2 n)$.}
 	\label{fig:ej1-pesadas}
 \end{figure}
 
-Los gráficos muestran un crecimiento cercano al lineal, consistente con la complejidad analizada. La curva teórica se escaló para 
-superponerla con la curva empírica obtenida a partir de la ejecución del algoritmo con distintos sets de datos.
+Los gráficos confirman el análisis teórico: el tiempo de ejecución crece linealmente con $n$, mientras que la cantidad
+de pesadas crece logarítmicamente.
 
 \subsection{Relación entre tiempo de ejecución y pesadas}
 
-Es razonable vincular el tiempo de ejecución del algoritmo con la cantidad de pesadas debido a que cada paso del algoritmo implica realizar una 
-cantidad constante de pesadas, y  el algoritmo tiene un crecimiento lineal, por lo tanto, la cantidad de pesadas crece de forma proporcional al algoritmo,
-es decir, linealmente ($O(n)$).
+El tiempo de ejecución y la cantidad de pesadas tienen \textbf{complejidades distintas}:
+
+\begin{itemize}
+	\item \textbf{Tiempo:} $O(n)$, dominado por el cómputo de \texttt{sum()} en cada nivel de recursión. Aunque solo se
+	      recursa una rama, el cálculo de los promedios recorre ~$n/2$ elementos en el primer nivel, $n/4$ en el
+	      segundo, etc., sumando en total $\approx 2n$ operaciones.
+	\item \textbf{Pesadas:} $O(\log_2 n)$, ya que se realiza exactamente una comparación de grupos por nivel, y el
+	      árbol tiene profundidad $\lceil \log_2 n \rceil$.
+\end{itemize}
+
+La distinción es relevante según qué se considere la \textit{operación elemental}: si se modela el problema con una
+balanza de platillos donde pesar un grupo completo cuenta como una sola operación, el costo relevante es $O(\log n)$
+pesadas. Si se considera el costo computacional real (calcular la suma), el costo es $O(n)$.
