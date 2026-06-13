@@ -1,0 +1,43 @@
+Algoritmo posicion_valida(laberinto, fila, columna, visitados)
+
+    Retornar fila >= 0
+        Y columna >= 0
+        Y fila < filas(laberinto)
+        Y columna < columnas(laberinto)
+        Y laberinto[fila][columna] != "X"
+        Y (fila, columna) no pertenece a visitados
+
+FinAlgoritmo
+
+
+Algoritmo avanzar(laberinto, fila, columna, solucion, visitados)
+
+    Si NOT posicion_valida(laberinto, fila, columna, visitados) entonces
+        Retornar FALSO
+    FinSi
+
+    Agregar (fila, columna) a solucion
+    Agregar (fila, columna) a visitados
+
+    Si laberinto[fila][columna] = "S" entonces
+        Retornar VERDADERO
+    FinSi
+
+    Para cada (df, dc) en {(0,1), (0,-1), (1,0), (-1,0)} hacer
+        Si avanzar(laberinto, fila+df, columna+dc, solucion, visitados) entonces
+            Retornar VERDADERO
+        FinSi
+    FinPara
+
+    Quitar (fila, columna) de solucion    // backtrack
+    Retornar FALSO
+
+FinAlgoritmo
+
+
+Algoritmo encontrar_camino(laberinto)
+
+    (fila_ini, col_ini) := buscar "E" en laberinto
+    Retornar avanzar(laberinto, fila_ini, col_ini, [], {})
+
+FinAlgoritmo

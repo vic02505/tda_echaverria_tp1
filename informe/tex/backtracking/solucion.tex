@@ -2,14 +2,14 @@
 
 \subsection{Introducción y Problema}
 
-En este ejercicio se modela el recorrido de una aspiradora robot dentro de un laberinto rectangular. El laberinto se representa mediante una matriz, 
+En este ejercicio se modela el recorrido de una aspiradora robot dentro de un laberinto rectangular. El laberinto se representa mediante una matriz,
 donde cada celda puede corresponder a una pared (\textit{X}), una posición transitable, la entrada (\textit{E}) o la salida (\textit{S}).
 
-El objetivo es diseñar, implementar y documentar un algoritmo de backtracking que, dado un laberinto de tamaño $m \times n$, encuentre un camino 
+El objetivo es diseñar, implementar y documentar un algoritmo de backtracking que, dado un laberinto de tamaño $m \times n$, encuentre un camino
 válido desde la posición inicial \textit{E} hasta la salida \textit{S}, en caso de que dicho camino exista.
 
-La solución devuelve el recorrido como una secuencia de coordenadas de la matriz. A partir de ese camino, pueden interpretarse 
-los movimientos que debería realizar la aspiradora para desplazarse por el laberinto, utilizando sus operaciones disponibles: 
+La solución devuelve el recorrido como una secuencia de coordenadas de la matriz. A partir de ese camino, pueden interpretarse
+los movimientos que debería realizar la aspiradora para desplazarse por el laberinto, utilizando sus operaciones disponibles:
 observar la celda siguiente, avanzar y girar.
 
 \subsection{Algoritmo de Backtracking}
@@ -42,30 +42,76 @@ Las estructuras de datos utilizadas son:
     \item Un conjunto de posiciones visitadas para evitar ciclos y no recorrer dos veces la misma celda.
 \end{itemize}
 
-Código en Python:
+A continuación se presenta el pseudocódigo del algoritmo:
 
-\lstinputlisting[language=Python]{code/laberinto.py}
+\lstinputlisting[]{code/laberinto.txt}
 
-El código del algoritmo se encuentra en \textit{code/laberinto.py}. La función \textit{avanzar} concentra la lógica recursiva del backtracking, mientras que \textit{encontrar\_camino\_bt} busca la posición inicial y actúa como punto de entrada del algoritmo.
+\subsection{Podas}
+
+El algoritmo aplica dos podas que reducen el espacio de búsqueda:
+
+\begin{itemize}
+    \item \textbf{Posición inválida}: antes de explorar una celda se verifica que esté dentro de los límites del laberinto y que no sea una pared. Si alguna de estas condiciones no se cumple, la rama se descarta de inmediato sin continuar la recursión.
+    \item \textbf{Conjunto de visitados}: cada celda que se incorpora a la solución se registra en un conjunto. Si una dirección conduce a una celda ya visitada, esa rama se descarta sin explorarla. Esta poda elimina ciclos e impide recorrer la misma celda más de una vez, garantizando que el árbol de búsqueda sea finito.
+\end{itemize}
 
 \subsection{Seguimiento}
 
-Para el seguimiento se toma el archivo \textit{laberinto1.txt}.
+Para el seguimiento se utiliza el siguiente laberinto de $5 \times 5$, donde \textit{E} se encuentra en la posición $(1,1)$ y \textit{S} en la posición $(3,3)$ (índices base cero). Las celdas libres se indican con \textbf{·}.
 
-Las posiciones se indican con índices base cero. Por lo tanto, la entrada \textit{E} se encuentra en la posición $(5,1)$ y la salida \textit{S} en la posición $(1,7)$.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+X & X & X & X & X \\
+\hline
+X & E & $\cdot$ & $\cdot$ & X \\
+\hline
+X & $\cdot$ & X & X & X \\
+\hline
+X & $\cdot$ & $\cdot$ & S & X \\
+\hline
+X & X & X & X & X \\
+\hline
+\end{tabular}
+\end{center}
 
-En el laberinto analizado, la entrada \textit{E} se encuentra en la posición $(5,1)$ y la salida \textit{S} en la posición $(1,7)$.
+El orden de exploración de direcciones es: derecha, izquierda, abajo, arriba.
 
-A partir de ahí, continúa explorando recursivamente las posiciones válidas. Cada celda recorrida se agrega a la solución y se marca como visitada. Cuando una rama no permite llegar a la salida, el algoritmo retrocede y prueba otra dirección.
+\begin{center}
+\begin{tabular}{|c|l|l|}
+\hline
+\textbf{Paso} & \textbf{Llamada / acción} & \textbf{Solución} \\
+\hline
+1  & \texttt{avanzar(1,1)}: válida, agregar               & \texttt{[(1, 1)]} \\
+2  & \texttt{avanzar(1,2)}: válida, agregar               & \texttt{[(1, 1), (1, 2)]} \\
+3  & \texttt{avanzar(1,3)}: válida, agregar               & \texttt{[(1, 1), (1, 2), (1, 3)]} \\
+4  & \texttt{avanzar(1,4)}: pared $\rightarrow$ FALSO     & — \\
+5  & \texttt{avanzar(1,2)}: visitada $\rightarrow$ FALSO  & — \\
+6  & \texttt{avanzar(2,3)}: pared $\rightarrow$ FALSO     & — \\
+7  & \texttt{avanzar(0,3)}: pared $\rightarrow$ FALSO     & — \\
+8  & \textbf{BACKTRACK}: sin salida desde (1,3), quitar   & \texttt{[(1, 1), (1, 2)]} \\
+9  & \texttt{avanzar(1,1)}: visitada $\rightarrow$ FALSO  & — \\
+10 & \texttt{avanzar(2,2)}: pared $\rightarrow$ FALSO     & — \\
+11 & \texttt{avanzar(0,2)}: pared $\rightarrow$ FALSO     & — \\
+12 & \textbf{BACKTRACK}: sin salida desde (1,2), quitar   & \texttt{[(1, 1)]} \\
+13 & \texttt{avanzar(1,0)}: pared $\rightarrow$ FALSO     & — \\
+14 & \texttt{avanzar(2,1)}: válida, agregar               & \texttt{[(1, 1), (2, 1)]} \\
+15 & \texttt{avanzar(2,2)}: pared $\rightarrow$ FALSO     & — \\
+16 & \texttt{avanzar(2,0)}: pared $\rightarrow$ FALSO     & — \\
+17 & \texttt{avanzar(3,1)}: válida, agregar               & \texttt{[(1, 1), (2, 1), (3, 1)]} \\
+18 & \texttt{avanzar(3,2)}: válida, agregar               & \texttt{[(1, 1), (2, 1), (3, 1), (3, 2)]} \\
+19 & \texttt{avanzar(3,3)}: salida \textit{S} $\rightarrow$ VERDADERO & \texttt{[(1, 1), (2, 1), (3, 1), (3, 2), (3, 3)]} \\
+\hline
+\end{tabular}
+\end{center}
 
-El camino devuelto para este caso es:
+El algoritmo primero explora hacia la derecha, llegando a $(1,3)$ sin poder continuar. Al no encontrar salida, retrocede (pasos 8 y 12) hasta $(1,1)$ y prueba la dirección abajo. Desde allí encuentra el camino correcto sin nuevos retrocesos.
+
+El camino devuelto es:
 
 \begin{verbatim}
-[(5, 1), (4, 1), (3, 1), (3, 2), (3, 3), (4, 3), (4, 4),
- (4, 5), (4, 6), (3, 6), (2, 6), (1, 6), (1, 7)]
+[(1, 1), (2, 1), (3, 1), (3, 2), (3, 3)]
 \end{verbatim}
-
-Este resultado muestra que el algoritmo encuentra un camino válido desde la entrada hasta la salida, sin atravesar paredes ni repetir celdas.
 
 \subsection{Resultados experimentales}
 
