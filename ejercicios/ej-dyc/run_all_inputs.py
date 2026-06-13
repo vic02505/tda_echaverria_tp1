@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-import subprocess
 import sys
+import time
 
 
 def load_expected_results():
@@ -22,17 +22,17 @@ def load_expected_results():
         return None
 
 
+REPETITIONS = 20
+
 def extract_values(output):
     """Extract moneda falsa and pesadas from output."""
-    moneda = pesadas = tiempo = None
+    moneda = pesadas = None
     for line in output.split("\n"):
         if line.startswith("Moneda falsa:"):
             moneda = int(line.split(":")[1].strip())
         elif line.startswith("Pesadas:"):
             pesadas = int(line.split(":")[1].strip())
-        elif line.startswith("Tiempo:"):
-            tiempo = float(line.split(":")[1].strip().split()[0])
-    return moneda, pesadas, tiempo
+    return moneda, pesadas
 
 
 def run_all_inputs():
@@ -58,42 +58,38 @@ def run_all_inputs():
         print(f"Error: Expected {len(input_files)} results but got {len(expected_results)}")
         return 1
 
-    # Print header
-    print(f"\n{'Input':<12} {'Expected':<10} {'Actual':<10} {'Status':<8} {'Pesadas':<10} {'Tiempo (s)':<12}")
-    print("-" * 70)
+    sys.path.insert(0, str(Path(__file__).parent))
+    from monedas import encontrar_moneda_falsa, leer_monedas
+
+    print(f"\n{'Input':<12} {'Expected':<10} {'Actual':<10} {'Status':<8} {'Pesadas':<10} {'Tiempo avg (us)':<16}")
+    print("-" * 78)
 
     passed = 0
     failed = 0
 
     for idx, input_file in enumerate(input_files):
-        filename = input_file.stem
         expected_coin = expected_results[idx]
 
-        result = subprocess.run(
-            [sys.executable, str(Path(__file__).parent / "monedas.py"), filename],
-            capture_output=True,
-            text=True
-        )
+        monedas = leer_monedas(input_file)
+        encontrar_moneda_falsa(monedas)  # warm-up
 
-        if result.returncode != 0:
-            print(f"{input_file.name:<12} {expected_coin:<10} {'ERROR':<10} {'❌':<8}")
-            failed += 1
-            continue
+        tiempos = []
+        actual_coin = pesadas = None
+        for _ in range(REPETITIONS):
+            t0 = time.perf_counter()
+            actual_coin, pesadas = encontrar_moneda_falsa(monedas)
+            t1 = time.perf_counter()
+            tiempos.append(t1 - t0)
 
-        actual_coin, pesadas, tiempo = extract_values(result.stdout)
+        avg_us = (sum(tiempos) / len(tiempos)) * 1e6
 
-        if actual_coin is None:
-            print(f"{input_file.name:<12} {expected_coin:<10} {'ERROR':<10} {'❌':<8}")
-            failed += 1
-            continue
-
-        status = "✓" if actual_coin == expected_coin else "❌"
+        status = "OK" if actual_coin == expected_coin else "FAIL"
         if actual_coin == expected_coin:
             passed += 1
         else:
             failed += 1
 
-        print(f"{input_file.name:<12} {expected_coin:<10} {actual_coin:<10} {status:<8} {pesadas:<10} {tiempo:<12.8f}")
+        print(f"{input_file.name:<12} {expected_coin:<10} {actual_coin:<10} {status:<8} {pesadas:<10} {avg_us:<16.2f}")
 
     print("-" * 70)
     print(f"Results: {passed}/{len(input_files)} passed")
