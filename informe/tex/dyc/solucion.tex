@@ -31,9 +31,39 @@ Las pesadas son la cantidad de veces que se usa la balanza para comparar grupos 
 una pesada cada vez que se calculan y comparan los promedios de ambas mitades, y también en los casos base (listas de
 longitud uno o dos).
 
+\textbf{Estructuras de datos:} El algoritmo opera sobre una lista de
+enteros que representan los pesos de las monedas. Los parámetros
+\texttt{inicio} y \texttt{fin} son índices enteros que delimitan el
+subarreglo activo en cada llamada recursiva, evitando copias. El
+\texttt{contador} se pasa por referencia (lista de un elemento) para
+acumular la cantidad de pesadas a través de las llamadas recursivas.
+
 \textbf{Solución:}
 
 \lstinputlisting[]{code/monedas.txt}
+
+\subsection{Seguimiento del algoritmo}
+
+Tomamos como ejemplo $n = 8$ monedas: $[10, 10, 10, 10, 4, 10, 10, 10]$
+donde la moneda falsa (peso 4) está en la posición 4.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+Paso & inicio & fin & $\overline{x}_{izq}$ & $\overline{x}_{der}$ & Decisión \\
+\hline
+1 & 0 & 7 & $\frac{40}{4}=10$ & $\frac{34}{4}=8.5$ & Recursar derecha \\
+2 & 4 & 7 & $\frac{4}{2}=2$   & $\frac{20}{2}=10$  & Recursar izquierda \\
+3 & 4 & 5 & $4$               & $10$               & Caso base: retorna 4 \\
+\hline
+\end{tabular}
+\caption{Seguimiento del algoritmo para $n=8$, falsa en posición 4.}
+\label{tab:ej1-seguimiento}
+\end{table}
+
+En 3 pesadas se identificó la moneda falsa, consistente con
+$\lceil \log_2 8 \rceil = 3$.
 
 \subsection{Complejidad temporal y cantidad de pesadas}
 
@@ -80,6 +110,11 @@ $\lceil \log_2 n \rceil$, y se realiza exactamente una pesada por nivel. La cant
 \text{Pesadas}(n) = O(\log_2 n)
 \]
 
+A diferencia de algoritmos como Merge Sort, este algoritmo \textbf{no
+requiere un paso de combinación}: una vez que se recursa sobre la mitad
+que contiene la moneda falsa, el resultado se retorna directamente sin
+necesidad de combinar resultados de ambas ramas.
+
 \subsection{Metodología adoptada}
 
 Se evaluó el algoritmo con sets de datos de distintos tamaños:
@@ -87,20 +122,21 @@ Se evaluó el algoritmo con sets de datos de distintos tamaños:
 n \in \{100,\ 500,\ 1000,\ 5000,\ 10000,\ 50000,\ 100000,\ 200000,\ 500000,\ 1000000\}
 \]
 Para cada tamaño se generó un archivo con $n$ monedas genuinas de peso 10 y una única moneda falsa de peso 4 en una
-posición aleatoria. El algoritmo se ejecutó con:
+posición aleatoria. Los tiempos reportados se obtuvieron ejecutando el script de benchmarking:
 
 \begin{verbatim}
-python3 ejercicios/ej-dyc/monedas.py <tamaño_set_de_datos>
+python ejercicios/ej-dyc/run_all_inputs.py
 \end{verbatim}
 
-Para el análisis del \textit{notebook}, cada tamaño se ejecutó 20 veces y se registró el tiempo promedio, mínimo y
-máximo con \texttt{time.perf\_counter()}, junto con la cantidad de pesadas.
+El script importa directamente la función \texttt{encontrar\_moneda\_falsa}, realiza una ejecución de \textit{warm-up}
+para descartar efectos de caché fríos, y luego mide 20 repeticiones con \texttt{time.perf\_counter()}, reportando el
+tiempo promedio en microsegundos junto con la cantidad de pesadas.
 
 \subsection{Resultados y gráficos}
 
 \input{resultados/resultados_ej1}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.85\textwidth]{img/ej1_tiempos.png}
 	\caption{Tiempo de ejecución en escala log-log con curvas de referencia $O(\log n)$, $O(n)$, $O(n \log n)$ y $O(n^2)$.
@@ -108,7 +144,7 @@ máximo con \texttt{time.perf\_counter()}, junto con la cantidad de pesadas.
 	\label{fig:ej1-tiempos}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.85\textwidth]{img/ej1_pesadas.png}
 	\caption{Cantidad de pesadas vs tamaño del array en escala semi-log.
@@ -134,3 +170,57 @@ El tiempo de ejecución y la cantidad de pesadas tienen \textbf{complejidades di
 La distinción es relevante según qué se considere la \textit{operación elemental}: si se modela el problema con una
 balanza de platillos donde pesar un grupo completo cuenta como una sola operación, el costo relevante es $O(\log n)$
 pesadas. Si se considera el costo computacional real (calcular la suma), el costo es $O(n)$.
+
+\subsection{Posible optimización: evitar el recálculo de sumas}
+
+Una optimización natural consiste en propagar la suma del segmento activo como parámetro de la llamada recursiva.
+En cada nivel, en lugar de calcular \texttt{sum()} sobre ambas mitades, se calcula la suma de \textbf{una sola mitad}
+en $O(n/2)$ y la suma de la otra se obtiene por resta en $O(1)$:
+
+\[
+\text{suma\_der} = \text{suma\_total} - \text{suma\_izq}
+\]
+
+La recurrencia resultante es:
+
+\[
+T(n) = T\!\left(\frac{n}{2}\right) + O\!\left(\frac{n}{2}\right) = T\!\left(\frac{n}{2}\right) + O(n)
+\]
+
+dado que $O(n/2) = O(n)$, el Teorema Maestro sigue aplicando con los mismos parámetros y la complejidad asintótica
+\textbf{no cambia}: $T(n) = O(n)$.
+
+Sin embargo, la constante oculta se reduce a la mitad. En el algoritmo original el trabajo acumulado por nivel es:
+\[
+n + \frac{n}{2} + \frac{n}{4} + \cdots \approx 2n \text{ operaciones}
+\]
+Con la optimización, al calcular solo una mitad por nivel:
+\[
+\frac{n}{2} + \frac{n}{4} + \frac{n}{8} + \cdots \approx n \text{ operaciones}
+\]
+Es decir, se obtiene una mejora práctica de $\approx 2\times$ en velocidad sin modificar la clase de complejidad.
+
+\subsection{Conclusión}
+
+El algoritmo de División y Conquista para identificar la moneda falsa
+presenta dos métricas de complejidad distintas según la operación que se
+considere elemental:
+
+\begin{itemize}
+    \item \textbf{Tiempo de CPU:} $O(n)$, ya que en cada nivel de recursión
+    se computan las sumas de ambas mitades del arreglo, acumulando un total
+    de aproximadamente $2n$ operaciones aritméticas.
+    \item \textbf{Pesadas de balanza:} $O(\log_2 n)$, ya que el algoritmo
+    realiza exactamente una comparación de grupos por nivel y el árbol de
+    recursión tiene profundidad $\lceil \log_2 n \rceil$.
+\end{itemize}
+
+Los resultados experimentales confirman ambas predicciones: en el gráfico
+log-log, los tiempos siguen la recta de pendiente 1 correspondiente a
+$O(n)$, mientras que en el gráfico semi-log, la cantidad de pesadas se
+alinea sobre la curva $c \cdot \log_2 n$.
+
+La distinción entre ambas complejidades es relevante en el contexto del
+problema: si se modela con una balanza de platillos donde pesar un grupo
+completo cuenta como una sola operación, el costo práctico es
+$O(\log_2 n)$ pesadas — óptimo para este tipo de problema.
