@@ -7,27 +7,30 @@ Estructura de entrega:
 Todos los comandos se ejecutan desde la raiz del proyecto.
 
 Ejercicio 1 - Division y Conquista (Monedas)
-- Comando: python3 ejercicios/ej-dyc/monedas.py <entrada>
+- Comando: python ejercicios/ej-dyc/monedas.py <entrada>
 - <entrada> puede ser un numero o un nombre de archivo. El script busca en ejercicios/ej-dyc/inputs.
 - Ejemplos:
-  - python3 ejercicios/ej-dyc/monedas.py 100
-  - python3 ejercicios/ej-dyc/monedas.py 5000.txt
+  - python ejercicios/ej-dyc/monedas.py 100
+  - python ejercicios/ej-dyc/monedas.py 5000.txt
 - Archivos disponibles en inputs:
-  - 100.txt, 500.txt, 1000.txt, 5000.txt, 10000.txt, 50000.txt
+  - 100.txt, 500.txt, 1000.txt, 5000.txt, 10000.txt, 50000.txt, 100000.txt, 200000.txt, 500000.txt, 1000000.txt
 
 Ejercicio 2 - Greedy (Paolo)
-- Comando: python3 ejercicios/ej-greedy/paolo.py
+- Comando: python ejercicios/ej-greedy/paolo.py
 - La ejecucion es interactiva por consola (cantidad de vertices, aristas y costos).
 
 Ejercicio 3 - Backtracking (Laberinto)
-- Comando: python3 ejercicios/ej-backtracking/laberinto.py <archivo_input>
+- Comando: python ejercicios/ej-backtracking/laberinto.py <archivo_input>
 - Puede pasarse solo el nombre. El script busca en ejercicios/ej-backtracking/set_de_datos.
-- Ejemplo:
-  - python3 ejercicios/ej-backtracking/laberinto.py laberinto1.txt
+- Ejemplos:
+  - python ejercicios/ej-backtracking/laberinto.py laberinto1.txt
+  - python ejercicios/ej-backtracking/laberinto.py laberinto_0.txt
 - Archivos disponibles en set_de_datos:
-  - laberinto1.txt, laberinto2.txt, laberinto3.txt
+  - laberinto_0.txt, laberinto1.txt, laberinto2.txt, laberinto3.txt, laberinto4.txt, laberinto5.txt
+- Para correr todos los casos de prueba:
+  - python ejercicios/ej-backtracking/run_all_tests.py
 
 Ejercicio 4 - Programacion Dinamica (Palindromos)
-- Comando: python3 ejercicios/ej-pd/palindromo.py <cadena>
+- Comando: python ejercicios/ej-pd/palindromo.py <cadena>
 - Ejemplo:
-  - python3 ejercicios/ej-pd/palindromo.py alala
+  - python ejercicios/ej-pd/palindromo.py alala

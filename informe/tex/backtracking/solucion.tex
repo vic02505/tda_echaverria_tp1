@@ -55,6 +55,26 @@ El algoritmo aplica dos podas que reducen el espacio de búsqueda:
     \item \textbf{Conjunto de visitados}: cada celda que se incorpora a la solución se registra en un conjunto. Si una dirección conduce a una celda ya visitada, esa rama se descarta sin explorarla. Esta poda elimina ciclos e impide recorrer la misma celda más de una vez, garantizando que el árbol de búsqueda sea finito.
 \end{itemize}
 
+\subsection{Ejecución}
+
+El código se encuentra en \textit{ejercicios/ej-backtracking/}. Para ejecutar el algoritmo sobre un archivo de entrada:
+
+\begin{verbatim}
+python ejercicios/ej-backtracking/laberinto.py <archivo_input>
+\end{verbatim}
+
+Para ver el seguimiento paso a paso (llamadas y backtracking):
+
+\begin{verbatim}
+python ejercicios/ej-backtracking/laberinto.py <archivo_input> --verbose
+\end{verbatim}
+
+Para correr todos los casos de prueba contra los resultados esperados:
+
+\begin{verbatim}
+python ejercicios/ej-backtracking/run_all_tests.py
+\end{verbatim}
+
 \subsection{Seguimiento}
 
 Para el seguimiento se utiliza el siguiente laberinto de $5 \times 5$, donde \textit{E} se encuentra en la posición $(1,1)$ y \textit{S} en la posición $(3,3)$ (índices base cero). Las celdas libres se indican con \textbf{·}.
