@@ -82,23 +82,32 @@ T(n) = T\!\left(\frac{n}{2}\right) + O(n)
 
 donde $A = 1$ (una sola llamada recursiva), $B = 2$ (el problema se divide a la mitad), y el costo adicional en cada nivel es $O(n)$ por el cálculo de \texttt{sum()} sobre ambas mitades.
 
-Aplicando el \textbf{Teorema Maestro} con $a=1$, $b=2$, $f(n)=n$:
-
+Aplicando el \textbf{Teorema Maestro} en la forma simplificada, la ecuación de recurrencia general se define como:
 \[
-n^{\log_b a} = n^{\log_2 1} = n^0 = 1
+\mathcal{T}(n) = A\mathcal{T}\left(\frac{n}{B}\right) + \mathcal{O}(n^C)
+\]
+De acuerdo con este teorema, la resolución de la complejidad se divide en tres casos según la relación comparativa entre $\log_B(A)$ y $C$:
+\begin{itemize}
+    \item \textbf{Si } $\log_B(A) < C \longrightarrow \mathcal{T}(n) = \mathcal{O}(n^C)$
+    \item \textbf{Si } $\log_B(A) = C \longrightarrow \mathcal{T}(n) = \mathcal{O}(n^C \log_B n) = \mathcal{O}(n^C \log n)$
+    \item \textbf{Si } $\log_B(A) > C \longrightarrow \mathcal{T}(n) = \mathcal{O}(n^{\log_B A})$
+\end{itemize}
+
+Para nuestra ecuación de recurrencia particular, $T(n) = T\left(\frac{n}{2}\right) + \mathcal{O}(n)$, los valores de los parámetros obtenidos son:
+\begin{itemize}
+    \item $A = 1$
+    \item $B = 2$
+    \item $C = 1$ \quad (ya que $\mathcal{O}(n) = \mathcal{O}(n^1)$)
+\end{itemize}
+
+Procedemos a evaluar el logaritmo base $B$ de $A$:
+\[
+\log_B(A) = \log_2(1) = 0
 \]
 
-Como $f(n) = n = \Omega(n^{0+1})$, se aplica el \textbf{Caso 3}: el costo en la raíz del árbol de recursión domina
-a todos los niveles siguientes. La condición de regularidad se verifica:
-
+Al comparar el resultado con el exponente $C$, se verifica que $0 < 1$ ($\log_B(A) < C$), lo que nos posiciona estrictamente en el \textbf{primer caso} del teorema. Por lo tanto, la complejidad temporal final del algoritmo está determinada por dicho caso:
 \[
-a \cdot f(n/b) = 1 \cdot \frac{n}{2} \leq \frac{1}{2} \cdot n \quad \checkmark
-\]
-
-Por lo tanto:
-
-\[
-\boxed{T(n) = O(n)}
+\mathcal{T}(n) = \mathcal{O}(n^C) \implies \boxed{T(n) = \mathcal{O}(n)}
 \]
 
 \textbf{Cantidad de pesadas:}
